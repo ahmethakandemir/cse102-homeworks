@@ -2,35 +2,38 @@
 #include <math.h>
 
 int calculator();
-void leap();
-void grades();
+int leap();
+int grades();
 
 int main(){
-    //leap();
-    //grades();
+    
+    leap();
     calculator();
+    grades();
+    
 }
 
 int calculator(){
-    printf("\n**********************************************\n");
+    
     char output,operation;
     int m,n;
     double final;
     double a,b;
     
-    int c = 0;
-    while(c == 0){
-        while(1){
+    int c = 0; // c is just used to check and reprompt the user if n > m situation occurs.
+    while(c == 0){ // this loop will continue asking output format or m and n values until it gets valid answers from user. 
+        while(1){ // this loop is for output format.
             printf("\nenter the format of output (S or I): ");
-            scanf("%s",&output);
+            scanf(" %c",&output);
             if (output == 'S' || output == 's' || output == 'I' || output == 'i'){
                 c = 1;
                 break;
             }
+
         }
     
-        while (output == 'S' || output == 's'){
-            printf("\nenter m and n values: ");
+        while (output == 'S' || output == 's'){ // this loop is when user enters S for output format, prompts m and n values until a valid answer.
+            printf("enter m and n values: ");
             scanf("%d%d",&m,&n);
 
             if(n >= m){
@@ -43,25 +46,25 @@ int calculator(){
         }
 
     }
-    printf("Enter the operation(+,-,/,*,%%,!,^): ");
+    printf("Enter the operation(+,-,/,*,%%,!,^): ");// getting the operation from user.
     scanf(" %c",&operation);
 
-    if(operation == '!'){
+    if(operation == '!'){ // when the operation is '!', there will be only one operand, so i needed to print it seperately.
         printf("Enter the operand: ");
         scanf("%lf",&a);
     }
-    else{
+    else{   // taking the operands
         printf("Enter the first operand: ");
         scanf("%lf",&a);
         printf("Enter the second operand: ");
         scanf("%lf",&b);
     }
     
-    int inta,intb;
+    int inta,intb; // needed to take int values of inputs in order to calculate factorial and module operations.
     inta = a;
     intb = b;
     
-    switch (operation)
+    switch (operation) // making the calculations
     {
     case '+':
         final = a + b;
@@ -92,12 +95,13 @@ int calculator(){
         break;
     default:
         printf("\nInvalid input for operation!!!!!\n");
+        printf("**********************************************\n\n");
         return 0;
     }
 
-    int intfinal = final;
-    // output turu I oldugunda finali yazdirdigimiz kisim..
-    if(output == 'I' || output == 'i'){
+    int intfinal = final; // we will need just left side of final value, so i am getting it with typecasting.
+    
+    if(output == 'I' || output == 'i'){ // this is where we print the result when output format is I..
         if(operation != '!'){
             printf("%d %c %d = %d\n", inta, operation, intb, intfinal);
             return 0;
@@ -108,18 +112,18 @@ int calculator(){
             return 0;
         }
     }
-    // bilimsel sekilde yazdirdigimiz kisim,,
-    if(output == 'S' || output == 's'){
+
+    if(output == 'S' || output == 's'){// this is where we print the result when the output format is S..
         if(operation != '!'){
             printf("%.2f %c %.2f = ", a, operation, b);
         }
         else{
             printf("%d! = ", inta); 
         }
-            int soltaraf = m - n;
-            // intfinal in eleman sayisini hesaplamaliyim ki tamfinaldigitten cikarabileyim, ve sayinin xxxxx formatini tam m ile ayni sayida tutabileyim
-            int intfinaldigit = 0;
-            if(intfinal != 0){
+            int soltaraf = m - n; // this is just to prevent variable mess.
+             
+            int intfinaldigit = 0; // calculating intfinaldigit value in order to changing the format of xx.xxx , to xxxxx; and printing 'e' value.
+            if(intfinal != 0){     
                 while (intfinal != 0){
                     intfinaldigit++;
                     intfinal /= 10;
@@ -129,23 +133,23 @@ int calculator(){
                 intfinaldigit = 1;
             }
 
-            int tamfinal;//tamfinal degeri, final degerinin xx,xxx seklindeki formatinin xxxxx sekline sokulmus halidir.
+            int tamfinal;//tamfinal value is final value but floating point added to int point, xxxxx format will be created.
             int tamlamacarpani = 1;
             for(int i = 0; i < m - intfinaldigit;i++){
                 tamlamacarpani *= 10;
             }
-            tamfinal = final * tamlamacarpani;// su an tamfinal degerimiz virgulsuz formatta,int olarak tanimladik, basamak sayisini bulup yazdirma islemine calisicaz.
-            int tamtemp = tamfinal;// variable karisikligini onlemek icin tamfinalle islem yaptiktan sonra surekli bu degere esitleyecegim. cunku pointer kullanamayacak kadar cahil ve zavalliyim.
-            int virgulleme = 1;
+            tamfinal = final * tamlamacarpani;// with tamlamacarpani value, we will be able to make the tamfinal value's digit count equal to m value, if m = 7, our xxxxx value will be xxxxx00.
+            int tamtemp = tamfinal;// tamtemp is used to storage tamfinal value after calculations.
+            int virgulleme = 1; // virgulleme is used to multiply with 10^n to format the number as given in m and n.
             for(int i = 0; i < n;i++){
                 virgulleme *= 10;
             }
-            //xxxx.x0
-            int soltamfinal;// tam finalin soldaki degeri..
+            
+            int soltamfinal;// we will create a soltamfinal value which is final value's before '.'
             soltamfinal = tamfinal / virgulleme;
             
             int soltamfinaltemp = soltamfinal;
-            int soltamfinaldigit = 0;
+            int soltamfinaldigit = 0;// this is soltamfinal's digit count.
             
             if(soltamfinal != 0){
                 while (soltamfinal != 0){
@@ -156,27 +160,26 @@ int calculator(){
             else{
                 soltamfinaldigit = 1;
             }
-            int soltamfinaldigittemp = soltamfinaldigit;
+            int soltamfinaldigittemp = soltamfinaldigit; //this is used to storage the value after calculations.
             
             soltamfinal = soltamfinaltemp;
-            int ekleme = 1;
+            int ekleme = 1; // this part is used for the situations when the final value has more digits than m value.
             for(int i = soltaraf; soltaraf < soltamfinaldigit; i++){
                 soltamfinaldigit--;
                 soltamfinal /= 10;
                 virgulleme *= 10;
                 ekleme *= 10;
             }  
-            if(soltamfinaldigit != soltaraf){
+            if(soltamfinaldigit != soltaraf){ // when soltaraf value is more than final value, in order to there will not be missing digit, we are printing '0's.
                 for(int i = soltamfinaldigit; i < soltaraf;i++);
                 printf("0");
-                
             }
 
-            printf("%d.",soltamfinal);
+            printf("%d.",soltamfinal); // printing final values left side.
 
             int sagtamfinal;
-            sagtamfinal = tamfinal % virgulleme;
-//          virgulun saginin basamak sayisini bulmaliyim cunku 074 yazdirmak isterken 74 yazdirmak istemem..
+            sagtamfinal = tamfinal % virgulleme;// this part is also used for printing zero's but to the right side of dot when digit nums is not equal. here it calculates digit num of right side.
+//          
             int sagtamfinaltemp = sagtamfinal;
             int sagtamfinaldigit = 0;
             
@@ -190,26 +193,25 @@ int calculator(){
                 sagtamfinaldigit = 1;
             }
             sagtamfinal = sagtamfinaltemp;
-//          burda da '0' i yazdirma isini yapiyoruz. eksik kalan 0 lari yazdirmis oluyoruz.
-            if(n != sagtamfinaldigit){
+            if(n != sagtamfinaldigit){ // this is where we print '0's.
                 for(int i = 0;i < n - sagtamfinaldigit;i++){
                     printf("0");
                 }
             }
-
+            // printing the final value and e value.
             printf("%d",sagtamfinal/ekleme);
             printf("e%d",intfinaldigit - soltaraf);
-            printf("\n");
-            printf("**********************************************\n");
+            printf("\n\n");
+            printf("**********************************************\n\n");
             return 0;
     }
 }
-void leap(){
+int leap(){
     int year;
     printf("\n**********************************************\n");
     printf("enter the year: ");
     scanf("%d",&year);
-
+    // we are taking year value and checking if it is leap or not.
     if(year % 400 == 0){
         printf("%d is a leap year.\n",year);
     }
@@ -223,18 +225,19 @@ void leap(){
     else{
         printf("%d is not a leap year.\n",year);
     }
-    printf("\n**********************************************\n");
+    printf("\n\n**********************************************\n\n");
+    return 0;
 }
 
-void grades(){
-    printf("\n**********************************************\n");
+int grades(){
+    
     int e1,e2,e3,a1,a2;
-    printf("enter the exam grades: ");
+    printf("enter the exam grades(between 0-100): ");
     scanf("%d%d%d",&e1,&e2,&e3);
-    printf("enter the assigments grades: ");
+    printf("enter the assigments grades(between 0-100): ");
     scanf("%d%d",&a1,&a2);
 
-    float final;
+    float final; // this is result value.
     final = ((e1 + e2 + e3)/3 * 0.6) + ((a1 + a2) /2 * 0.4);
 
     if(final < 60){
@@ -243,7 +246,8 @@ void grades(){
     else{
         printf("Final grade: %.1f Passed!",final);
     }
-    printf("\n**********************************************\n");
+    printf("\n\n**********************************************\n");
+    return 0;
 }
 
 
