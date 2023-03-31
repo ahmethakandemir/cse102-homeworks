@@ -15,12 +15,12 @@ int main(){
 }
 
 int drawing(int flag,int c,int n,int sayac){
-    
+        
     if(flag == 0){
         srand(time(NULL));
             printf("Enter board size: ");
-            scanf("%d",&n);        
-        while(n < 2){
+            scanf("%d",&n);
+        while((n < 5) || (n > 10)){
             printf("'n' can't be less than 2, enter n value again: ");
             scanf("%d",&n);
         }
@@ -29,6 +29,7 @@ int drawing(int flag,int c,int n,int sayac){
             d = rand()%(n*n);
         }
     }
+
     counter = 0;
     
     if(status(c,d)){
@@ -69,12 +70,15 @@ int drawing(int flag,int c,int n,int sayac){
     return 1;
 }
 
+
 int status(int c,int d){
     if(c == d){
         return 1;
     }
     return 0;
 }
+
+
 void gameplay(int c,int n){
     char input;
     
@@ -84,9 +88,9 @@ void gameplay(int c,int n){
     switch (input)
     {
     case 'w':
-        if(c > n){
+        if(c >= n){
             c = c - n;
-            
+            printf("\n");
         }
         else{
             printf("you hit the wall,try again!!\n");
@@ -95,6 +99,7 @@ void gameplay(int c,int n){
     case 's':
         if (c + n < n * n){
             c = c + n;
+            printf("\n");
         }
         else{
             printf("you hit the wall,try again!!\n");
@@ -103,6 +108,7 @@ void gameplay(int c,int n){
     case 'a':
         if (c % n > 0){
             c = c - 1;
+            printf("\n");
         }
         else{
             printf("you hit the wall,try again!!\n");
@@ -111,6 +117,7 @@ void gameplay(int c,int n){
     case 'd':
         if (c % n < n - 1){
             c = c + 1;
+            printf("\n");
         }
         else{
             printf("you hit the wall,try again!!\n");
