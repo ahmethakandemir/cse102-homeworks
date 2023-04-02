@@ -1,4 +1,4 @@
-all: clear clean compile run 
+all: clear compile run clean
 
 clean:
 	@rm -f test
