@@ -2,7 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 
-int flag = 0,n = 1,d = 0,c = 0,counter,sayac = 0;
+#define UP 'w'
+#define DOWN 's'
+#define RIGHT 'd'
+#define LEFT 'a'
+
+int n = 1,d = 0,c = 0,counter,sayac = 0;
 int drawing(int flag,int c,int n,int sayac);
 void gameplay(int c,int n);
 int status(int c,int d);
@@ -21,13 +26,15 @@ int drawing(int flag,int c,int n,int sayac){
             printf("Enter board size: ");
             scanf("%d",&n);
         while((n < 5) || (n > 10)){
-            printf("'n' can't be less than 2, enter n value again: ");
+            printf("'n' can't be less than 5, and more than 10. Enter n value again: ");
             scanf("%d",&n);
         }
         while(c == d){
             c = rand()%(n*n);
             d = rand()%(n*n);
         }
+        system("clear");
+        printf("\n");
     }
 
     counter = 0;
@@ -87,7 +94,7 @@ void gameplay(int c,int n){
     system("clear");
     switch (input)
     {
-    case 'w':
+    case UP:
         if(c >= n){
             c = c - n;
             printf("\n");
@@ -96,7 +103,7 @@ void gameplay(int c,int n){
             printf("you hit the wall,try again!!\n");
         }
         break;
-    case 's':
+    case DOWN:
         if (c + n < n * n){
             c = c + n;
             printf("\n");
@@ -105,7 +112,7 @@ void gameplay(int c,int n){
             printf("you hit the wall,try again!!\n");
         }
         break;
-    case 'a':
+    case LEFT:
         if (c % n > 0){
             c = c - 1;
             printf("\n");
@@ -114,7 +121,7 @@ void gameplay(int c,int n){
             printf("you hit the wall,try again!!\n");
         }
         break;
-    case 'd':
+    case RIGHT:
         if (c % n < n - 1){
             c = c + 1;
             printf("\n");
@@ -143,7 +150,7 @@ int game(){
     switch (selection)
     {
     case 1:
-        drawing(flag,c,n,sayac);
+        drawing(0,c,n,sayac);
         break;
     case 2:
         printf("The character is able to move one space in any of the four cardinal directions: up, down, left, and right.\nDiagonal moves are not allowed. The user will input their desired move using the following keys: 'a' forleft, 'd' for right, 'w' for up, and 's' for down. \nThese moves should be defined at the beginning of the codewith direction names as the keys. \nAny control or selection with [a, d, w, s] characters will result in amissgrading. \nThe game will prompt the user for a new move after each move is made until the game isover.\nThe current state of the room should be printed after each move, except when the character reaches thedoor. \nIf the character attempts to move through a wall, a warning message should be displayed. \nThegame ends when the character reaches the door, and a message should be displayed to notify the userthat the game is over and how many moves were made during the game.");
