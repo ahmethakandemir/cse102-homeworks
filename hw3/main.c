@@ -7,9 +7,10 @@
 #define RIGHT 'd'
 #define LEFT 'a'
 
-int n = 1,d = 0,c = 0,counter,sayac = 0;
+int n = 1,d = 0,c = 0;
+
 int drawing(int flag,int c,int n,int sayac);
-void gameplay(int c,int n);
+void gameplay(int c,int n,int sayac);
 int status(int c,int d);
 int game();
 
@@ -37,7 +38,7 @@ int drawing(int flag,int c,int n,int sayac){
         printf("\n");
     }
 
-    counter = 0;
+    int counter = 0;
     
     if(status(c,d)){
         printf("************************\n\nYOU WON!!(in %d moves!!)\n\n************************\n",sayac);
@@ -68,11 +69,11 @@ int drawing(int flag,int c,int n,int sayac){
     for(int i = 0; i < (2*n)+1; i++){
         printf("-");
     }
-    sayac++;
+    
     printf("\n");
     flag = 1;
     
-    gameplay(c,n);
+    gameplay(c,n,sayac);
 
     return 1;
 }
@@ -86,7 +87,7 @@ int status(int c,int d){
 }
 
 
-void gameplay(int c,int n){
+void gameplay(int c,int n,int sayac){
     char input;
     
     printf("enter your move: ");
@@ -150,7 +151,7 @@ int game(){
     switch (selection)
     {
     case 1:
-        drawing(0,c,n,sayac);
+        drawing(0,c,n,0);
         break;
     case 2:
         printf("The character is able to move one space in any of the four cardinal directions: up, down, left, and right.\nDiagonal moves are not allowed. The user will input their desired move using the following keys: 'a' forleft, 'd' for right, 'w' for up, and 's' for down. \nThese moves should be defined at the beginning of the codewith direction names as the keys. \nAny control or selection with [a, d, w, s] characters will result in amissgrading. \nThe game will prompt the user for a new move after each move is made until the game isover.\nThe current state of the room should be printed after each move, except when the character reaches thedoor. \nIf the character attempts to move through a wall, a warning message should be displayed. \nThegame ends when the character reaches the door, and a message should be displayed to notify the userthat the game is over and how many moves were made during the game.");
