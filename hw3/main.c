@@ -63,19 +63,22 @@ int game(int welcome){
 }
 
 int drawing(int flag,int c,int n,int sayac){    // drawing the room function
-        
+
     if(flag == 0){  // flag is again used to find out if the function run for the first time, because at second time user not be asked for board size.
         srand(time(NULL));  // this function is for creating random coordinates at every run of the program
         printf("Enter board size: ");
         scanf("%d",&n); // taking the size input.
-
+        c = 0;      // c is coordinate of Character we move.
+        d = 0;      // d is coordinate of Door.
         while((n < 5) || (n > 10)){ // if the board is smaller than 5x5 or bigger than 10x10 as in rules, user will be reasked again and again until enters a valid value for size.
             printf("'n' can't be less than 5, and more than 10. Enter n value again: ");
             scanf("%d",&n);
+            
         }
         while(c == d){              // generating random coordinates and assigning them into a variable.
-            c = rand()%(n*n);
             d = rand()%(n*n);
+            c = rand()%(n*n);
+
         }
         system("clear");            // clearing the screen to start the game.
         printf("\n");
@@ -87,11 +90,12 @@ int drawing(int flag,int c,int n,int sayac){    // drawing the room function
         printf("~*~*~*~*~*~*~*~*~*~*~*~\n\nYOU WON!!(in %d moves!!)\n\n~*~*~*~*~*~*~*~*~*~*~*~\n",sayac); 
         return 1;
     }
+
     // here is printing the room.
     for(int i = 0; i < (2*n)+1; i++){  // first, printing the ceiling.
         printf("-");
     }
-    
+
     for(int i = 0; i < n;i++){          // printing '| ' to create every cell, if cell's coordinate is equal to C or D letters coordinate, prints '|C' or '|D' instead of '| '.
         printf("\n");
         for(int k = 0; k < n;k++){
