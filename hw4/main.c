@@ -12,7 +12,6 @@ FILE * fbill;
 int main(){
     menuing();
     billing();
-
 }
 
 void billtoterminal(){
@@ -21,10 +20,10 @@ void billtoterminal(){
     printf("\n\nHere is your bill: \n\n");
     while(1){
         c = fgetc(fbill);
-        printf("%c",c);
         if(c == EOF){
             break;
         }
+        printf("%c",c);
     }
     printf("\n");
     fclose(fbill);
@@ -36,10 +35,9 @@ float total(float sum){
     float disc;
     int flag = 0;
     float vat;
-    vat = sum * 18 / 100;
-    sum = sum + vat; //VAT value calculated before student discount, and added to price payable.
     fbill = fopen("bill.txt","a");
-    fprintf(fbill,"\nVAT(%%18):                    +%.2f",vat);
+    fprintf(fbill,"Total:                        %.2f",sum);
+
     while(!flag){
 
         printf("Are you student? (Y/N):");
@@ -58,18 +56,19 @@ float total(float sum){
             flag = 1;
             break;
         default:
-            printf("Invalid input!");
+            printf("Invalid input!\n");
             break;
         }
     }
 
-
-
     fprintf(fbill,"\n---------------------------------------\n");
-    fprintf(fbill,"Price Payable:                %.2f",sum);
-    
+    fprintf(fbill,"\nPrice:                        %.2f",sum);
+    vat = sum * 18 / 100;
+    sum = sum + vat; //VAT value calculated before student discount, and added to price payable.
+    fprintf(fbill,"\nPrice + VAT:                  %.2f\n",sum);
+
     fclose(fbill);
-    return sum;
+    return 0;
 }
 
 
@@ -104,8 +103,12 @@ int billing(){
         }
 
         printf("\n");
-        printf("How many servings do you want?: ");
-        scanf("%d",&servings);
+        while(1){
+            printf("How many servings do you want?: ");
+            scanf("%d",&servings);
+            break;
+            
+        }
 
         if(servings != 0){
             fbill = fopen("bill.txt","a+");
