@@ -1,0 +1,10 @@
+Kebap 75.99
+Lahmacun 21.50
+Pide 40.00
+Doner 55.60
+Kola 15.00
+Su 5.00
+Kunefe 60.00
+Sutlaç 32.50
+Mocha 40.25
+Latte 30.50

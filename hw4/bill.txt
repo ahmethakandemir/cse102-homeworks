@@ -1,0 +1,4 @@
+2* Kebap    151.98
+Pide        40.00
+Kebap       75.99
+2* Lahmacun 43.00
