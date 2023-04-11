@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
 int menuing();
 int billing();
 float total(float sum);
 void billtoterminal();
+int rps();
 
 FILE * fmenu;
 FILE * fbill;
@@ -12,6 +14,7 @@ FILE * fbill;
 int main(){
     menuing();
     billing();
+    rps();
 }
 
 void billtoterminal(){
@@ -32,11 +35,11 @@ void billtoterminal(){
 
 float total(float sum){
     char student;
-    float disc;
+    float stddisc,yuzellidisc;
     int flag = 0;
     float vat;
     fbill = fopen("bill.txt","a");
-    fprintf(fbill,"Total:                        %.2f",sum);
+    fprintf(fbill,"\nTotal:                        %.2f",sum);
 
     while(!flag){
 
@@ -46,13 +49,19 @@ float total(float sum){
         {
         case 'y':
         case 'Y':
-            disc = sum * 12.5 / 100;
-            sum -= disc;
-            fprintf(fbill,"\nStudent Discount:            -%.2f",disc);
+            stddisc = sum * 12.5 / 100;
+            sum -= stddisc;
+            fprintf(fbill,"\nStudent Discount:            -%.2f",stddisc);
+
             flag = 1;
             break;
         case 'N':
         case 'n':
+            if(sum >=150){
+                yuzellidisc = sum * 0.1;
+                fprintf(fbill,"\n%%10 discount:                -%.2f",yuzellidisc);
+                sum -= yuzellidisc;
+            }
             flag = 1;
             break;
         default:
@@ -66,7 +75,8 @@ float total(float sum){
     vat = sum * 18 / 100;
     sum = sum + vat; //VAT value calculated before student discount, and added to price payable.
     fprintf(fbill,"\nPrice + VAT:                  %.2f\n",sum);
-
+    fprintf(fbill,"\n---------------------------------------\n");
+    
     fclose(fbill);
     return 0;
 }
@@ -76,10 +86,12 @@ float total(float sum){
 int billing(){
     fbill = fopen("bill.txt","w");
     fprintf(fbill,"210104004055           ");
+
     time_t t;
     t = time(NULL);
     char arr[30];
     strftime(arr,sizeof(arr),"%d.%m.%Y/%H:%M",localtime(&t));
+
     fprintf(fbill,"%s",arr);
     fprintf(fbill,"\n---------------------------------------\n");
     fprintf(fbill,"Product                       Price\n");
@@ -105,9 +117,12 @@ int billing(){
         printf("\n");
         while(1){
             printf("How many servings do you want?: ");
-            scanf("%d",&servings);
-            break;
             
+            if((scanf("%d",&servings) == 1)){
+                break;
+            }
+            printf("Please enter a valid number!!\n\n");
+            getchar();
         }
 
         if(servings != 0){
@@ -122,8 +137,19 @@ int billing(){
             }
 
             if(servings > 1){
+                if(servings >= 1000){
+                    boslukcu += 6;
+                }
+                else if(servings >= 100){
+                    boslukcu += 5;
+                }
+                else if(servings >= 10){
+                    boslukcu += 4;
+                }
+                else{
+                    boslukcu += 3;
+                }
                 fprintf(fbill,"%d* ",servings);
-                boslukcu += 3;
             }
 
             while ((c = fgetc(fmenu)) != 32){
@@ -187,5 +213,84 @@ int menuing(){
     fclose(fmenu);
 
     printf("\n\n");
+    return 0;
+}
+
+int rps(){
+    srand(time(NULL));
+    
+    int comp,user;
+    #define stone 1
+    #define paper 2
+    #define scissors 4
+
+    comp = rand()%3 + 1;
+    if(comp == 3){
+        comp++;
+    }
+
+    printf("Please make a choice!\n""1: Stone, 2: Paper, 3: Scissors\n");
+    while(1){
+        if((scanf("%d",&user) == 1) && ((user <= 3) && user >= 1)){
+            if(user == 3){
+                user++;
+            }
+            break;
+        }
+        else{
+            printf("\ninvalid selection!!\n");
+        }
+    }
+    
+    if(user == stone){
+        printf("You chose Stone. ");
+    }
+    else if(user == paper){
+        printf("You chose Paper. ");
+    }
+    else{
+        printf("You chose Scissors. ");
+    }
+    if(comp == stone){
+        printf("I chose Stone. ");
+    }
+    else if(comp == paper){
+        printf("I chose Paper. ");
+    }
+    else{
+        printf("I chose Scissors. ");
+    }
+    if(user == comp){
+        printf("It's a tie!\n");
+    }
+    else if((user * 2 == comp) || (comp * 4 == user)){
+        printf("I won!\n");
+    }
+    else{
+        printf("You won!\n");
+    }
+    char again;
+    int flag = 1;
+    while (flag == 1)
+        {
+        printf("Do you want to play again?? ");
+        scanf(" %c",&again);
+        switch (again)
+        {
+        case 'Y':
+        case 'y':
+            rps();
+            flag = 0;
+            break;
+        case 'N':
+        case 'n':
+            printf("Good bye!!");
+            return 0;
+        default:
+            printf("Invalid selection!\n");
+            break;
+        }
+    }
+
     return 0;
 }

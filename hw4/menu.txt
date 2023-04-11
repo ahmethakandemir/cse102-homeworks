@@ -4,9 +4,11 @@ Kebap     75.99
 Lahmacun  21.50
 Pide      40.00
 Doner     55.60
-Kola      15.00
-Su        5.00
+Magnolia  20.00
 Kunefe    60.00
 Sutlac    32.50
+Su        3.00
+Ayran     10.00
+Kola      12.00
 Mocha     40.25
 Latte     30.50
