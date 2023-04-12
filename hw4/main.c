@@ -12,8 +12,8 @@ FILE * fmenu; // open the menu file
 FILE * fbill; // open the file which will be our bill file.
 
 int main(){
-    menuing();
-    billing();
+    //menuing();
+    //billing();
     rps(); // rock paper scissors.
 }
 int menuing(){  // printinh the menu function
@@ -82,31 +82,31 @@ int billing(){  // printing the bill.
             }
             getchar();
         }
-        choose += 2;
+        choose += 2; // ignoring the first 2 trash line
 
         printf("\n");
-        while(1){
+        while(1){ // same as choose thing, prompt until user enters a valid value.
             printf("How many servings do you want?: ");
             
-            if((scanf("%d",&servings) == 1)){
+            if((scanf("%d",&servings) == 1)){ // checking if input is integer.
                 break;
             }
             printf("Please enter a valid number!!\n\n");
             getchar();
         }
 
-        if(servings != 0){
+        if(servings != 0){  // if 0 is not inputted for serving count,,
             fbill = fopen("bill.txt","a+");
             fmenu = fopen("menu.txt","r");
-            for(i = 0; i < choose - 1;i++){
+            for(i = 0; i < choose - 1;i++){ // here, it looks like an empty loop but i used it to go to exact line i want, the chosen meals line.
                 while ((c = fgetc(fmenu)) != EOF){
                     if(c == 10){
-                        break;
+                        break;  // breaks every new line and does this for chosen number times.
                     }
                 }
             }
 
-            if(servings > 1){
+            if(servings > 1){ // it is for arranging spaces so not that important i guess.
                 if(servings >= 1000){
                     boslukcu += 6;
                 }
@@ -122,29 +122,28 @@ int billing(){  // printing the bill.
                 fprintf(fbill,"%d* ",servings);
             }
 
-            while ((c = fgetc(fmenu)) != 32){
+            while ((c = fgetc(fmenu)) != 32){ // printing the name on the bill
                 fprintf(fbill, "%c",c);
-                boslukcu++;
+                boslukcu++; // arranging spaces.
             }
 
             fprintf(fbill," ");
             
-            fscanf(fmenu,"%f",&price);
+            fscanf(fmenu,"%f",&price); // getting the price.
             
             fclose(fmenu);
 
-            price *= servings;
-            sum += price;
-            for(i = 0; i < 30 - boslukcu ;i++){
+            price *= servings; // multiplying price with serving counts.
+            sum += price;       // adding all of items on the bill to one total.
+            for(i = 0; i < 30 - boslukcu ;i++){ // printing the arranged spaces.
                 fprintf(fbill," ");
             }
-            fprintf(fbill,"%.2f\n",price);
+            fprintf(fbill,"%.2f\n",price); // printing the price.
             fclose(fbill);
         }
-        else{
-            total(sum);
-            billtoterminal();
-            //fprintf(fbill,"%.2f",total(student,sum));
+        else{   // 0 is entered as servings count.
+            total(sum);     // running the total func.
+            billtoterminal();// printing the bill.txt to terminal.
             return 0;
         }
     }
@@ -154,20 +153,20 @@ int billing(){  // printing the bill.
 
 float total(float sum){
     char student;
-    float stddisc,yuzellidisc;
+    float stddisc = 0,yuzellidisc;
     int flag = 0;
     float vat;
     fbill = fopen("bill.txt","a");
-    fprintf(fbill,"\nTotal:                        %.2f",sum);
+    fprintf(fbill,"\nTotal:                        %.2f",sum); // total price without VAT or discounts.
 
-    while(!flag){
+    while(!flag){ // asking if student until a valid answer.
 
         printf("Are you student? (Y/N):");
         scanf(" %c",&student);
         switch (student)
         {
         case 'y':
-        case 'Y':
+        case 'Y': // if student, calculating the discount and printing it. 
             stddisc = sum * 12.5 / 100;
             
             fprintf(fbill,"\nStudent Discount:            -%.2f",stddisc);
@@ -184,16 +183,16 @@ float total(float sum){
             break;
         }
     }
-    if(sum >=150){
+    if(sum >=150){ // if the total is above 150 tl, discount will be applied.
         yuzellidisc = sum * 0.1;
-        fprintf(fbill,"\n%%10 discount:                -%.2f",yuzellidisc);
-        sum -= yuzellidisc;
+        fprintf(fbill,"\n%%10 discount:                -%.2f",yuzellidisc); // and printing the discounted value.
+        sum -= yuzellidisc; 
     }
-    sum -= stddisc;
+    sum -= stddisc; // discountings...
     fprintf(fbill,"\n---------------------------------------\n");
     fprintf(fbill,"\nPrice:                        %.2f",sum);
     vat = sum * 18 / 100;
-    sum = sum + vat; //VAT value calculated before student discount, and added to price payable.
+    sum = sum + vat; //VAT value calculated and added and printed.
     fprintf(fbill,"\nPrice + VAT:                  %.2f\n",sum);
     printf("\n---------------------------------------\n");
     
@@ -201,7 +200,7 @@ float total(float sum){
     return 0;
 }
 
-void billtoterminal(){
+void billtoterminal(){ // an infinitive loop which will last until EOF, printing the bill.txt to terminal.
     fbill = fopen("bill.txt","r");
     int c;
     printf("\n\nHere is your bill: \n\n");
@@ -218,20 +217,20 @@ void billtoterminal(){
 
 
 
-int rps(){
+int rps(){ // rock paper scissors.
     srand(time(NULL));
     
     int comp,user;
     #define stone 1
     #define paper 2
-    #define scissors 4
+    #define scissors 4 // it is 4 because i can make calculations like if (a == 2 * b), a wins. it wasnt necessary but i thought like this and now i don't have time to change it.
 
-    comp = rand()%3 + 1;
+    comp = rand()%3 + 1; // random value generating.
     if(comp == 3){
         comp++;
     }
 
-    printf("Please make a choice!\n""1: Stone, 2: Paper, 3: Scissors\n");
+    printf("Please make a choice!\n""1: Stone, 2: Paper, 3: Scissors\n"); // asking until a valid answer.
     while(1){
         if((scanf("%d",&user) == 1) && ((user <= 3) && user >= 1)){
             if(user == 3){
@@ -243,7 +242,7 @@ int rps(){
             printf("\ninvalid selection!!\n");
         }
     }
-    
+    // simple printings.
     if(user == stone){
         printf("You chose Stone. ");
     }
@@ -253,6 +252,7 @@ int rps(){
     else{
         printf("You chose Scissors. ");
     }
+
     if(comp == stone){
         printf("I chose Stone. ");
     }
@@ -265,7 +265,7 @@ int rps(){
     if(user == comp){
         printf("It's a tie!\n");
     }
-    else if((user * 2 == comp) || (comp * 4 == user)){
+    else if((user * 2 == comp) || (comp * 4 == user)){ // deciding who won.
         printf("I won!\n");
     }
     else{
@@ -273,7 +273,7 @@ int rps(){
     }
     char again;
     int flag = 1;
-    while (flag == 1)
+    while (flag == 1) // prompting until user doesn't want to play anymore.
         {
         printf("Do you want to play again?? ");
         scanf(" %c",&again);
