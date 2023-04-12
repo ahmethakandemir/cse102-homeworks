@@ -8,104 +8,73 @@ float total(float sum);
 void billtoterminal();
 int rps();
 
-FILE * fmenu;
-FILE * fbill;
+FILE * fmenu; // open the menu file
+FILE * fbill; // open the file which will be our bill file.
 
 int main(){
     menuing();
     billing();
-    rps();
+    rps(); // rock paper scissors.
 }
+int menuing(){  // printinh the menu function
+    fmenu = fopen("menu.txt","r");
+    int i = 1,k = 0; // k is our line num, in menu file the first 2 line is trash so we need to skip them somehow.
+    printf("Yemek Listesi:\n");
+    printf("1. ");
 
-void billtoterminal(){
-    fbill = fopen("bill.txt","r");
-    int c;
-    printf("\n\nHere is your bill: \n\n");
-    while(1){
-        c = fgetc(fbill);
+    while(1){ // a while loop which will last until reaching EOF
+        int c = fgetc(fmenu);
+
         if(c == EOF){
-            break;
+            printf("\n");
+            return 0;
         }
-        printf("%c",c);
-    }
-    printf("\n");
-    fclose(fbill);
-}
-
-
-float total(float sum){
-    char student;
-    float stddisc,yuzellidisc;
-    int flag = 0;
-    float vat;
-    fbill = fopen("bill.txt","a");
-    fprintf(fbill,"\nTotal:                        %.2f",sum);
-
-    while(!flag){
-
-        printf("Are you student? (Y/N):");
-        scanf(" %c",&student);
-        switch (student)
-        {
-        case 'y':
-        case 'Y':
-            stddisc = sum * 12.5 / 100;
-            
-            fprintf(fbill,"\nStudent Discount:            -%.2f",stddisc);
-
-            flag = 1;
-            break;
-        case 'N':
-        case 'n':
-
-            flag = 1;
-            break;
-        default:
-            printf("Invalid input!\n");
-            break;
+        if(((c >= 48 && c <= 57) || c == 46) || k < 2){} // here if our character is digit or a space, we are ignoring it and do nothing.
+        else{
+            printf("%c",c); // else we are printing it and that means we only print the meal name on the menu.
+        }
+        if(c == 10){
+            k++;
+            if(k > 2){
+                i++;
+                printf("%d. ",i); // printing 1. 2. at the beginning of product names.
+            }
         }
     }
-    if(sum >=150){
-        yuzellidisc = sum * 0.1;
-        fprintf(fbill,"\n%%10 discount:                -%.2f",yuzellidisc);
-        sum -= yuzellidisc;
-    }
-    sum -= stddisc;
-    fprintf(fbill,"\n---------------------------------------\n");
-    fprintf(fbill,"\nPrice:                        %.2f",sum);
-    vat = sum * 18 / 100;
-    sum = sum + vat; //VAT value calculated before student discount, and added to price payable.
-    fprintf(fbill,"\nPrice + VAT:                  %.2f\n",sum);
-    printf("\n---------------------------------------\n");
-    
-    fclose(fbill);
+
+    fclose(fmenu);
+
+    printf("\n\n");
     return 0;
 }
 
 
 
-int billing(){
+
+
+
+int billing(){  // printing the bill.
     fbill = fopen("bill.txt","w");
     fprintf(fbill,"210104004055           ");
 
     time_t t;
     t = time(NULL);
-    char arr[30]; // I needed to use an array to use strftime because you said use this function.
+    char arr[30]; // I needed to use an array to use strftime because you said use this function, so i can't do it without it as you know.
     strftime(arr,sizeof(arr),"%d.%m.%Y/%H:%M",localtime(&t));
-
     fprintf(fbill,"%s",arr);
+    
     fprintf(fbill,"\n---------------------------------------\n");
     fprintf(fbill,"Product                       Price\n");
     fprintf(fbill,"---------------------------------------");
     fprintf(fbill,"\n");
     fclose(fbill);
-    float sum = 0;
-    float price;
+    float sum = 0; // used to calculate total price of products.
+    float price; // and this is the final price 
     int c,i,servings;
-    while(1){
-        int boslukcu = 1;
-        int choose = 99;
-        while (choose < 1 || choose > 12){
+    while(1){ // this while loop is for printing the selection to the bill until 0 is pressed.
+        int boslukcu = 1; // i used this variable to arrange spaces in bill to make it look less messy.
+        int choose = 99; // this can be anything except 1,12.
+        while (choose < 1 || choose > 12){  // prompt until user enters a valid value.
             printf("\nPlease choose a product (1-12): ");
             scanf("%d",&choose);
             if((choose < 1 || choose > 12)){
@@ -183,39 +152,71 @@ int billing(){
     return 1;
 }
 
+float total(float sum){
+    char student;
+    float stddisc,yuzellidisc;
+    int flag = 0;
+    float vat;
+    fbill = fopen("bill.txt","a");
+    fprintf(fbill,"\nTotal:                        %.2f",sum);
 
+    while(!flag){
 
-int menuing(){
-    fmenu = fopen("menu.txt","r");
-    int i = 1,k = 0;
-    printf("Yemek Listesi:\n");
-    printf("1. ");
+        printf("Are you student? (Y/N):");
+        scanf(" %c",&student);
+        switch (student)
+        {
+        case 'y':
+        case 'Y':
+            stddisc = sum * 12.5 / 100;
+            
+            fprintf(fbill,"\nStudent Discount:            -%.2f",stddisc);
 
-    while(1){
-        int c = fgetc(fmenu);
+            flag = 1;
+            break;
+        case 'N':
+        case 'n':
 
-        if(c == EOF){
-            printf("\n");
-            return 0;
-        }
-        if(((c >= 48 && c <= 57) || c == 46) || k < 2){}
-        else{
-            printf("%c",c);
-        }
-        if(c == 10){
-            k++;
-            if(k > 2){
-                i++;
-                printf("%d. ",i);
-            }
+            flag = 1;
+            break;
+        default:
+            printf("Invalid input!\n");
+            break;
         }
     }
-
-    fclose(fmenu);
-
-    printf("\n\n");
+    if(sum >=150){
+        yuzellidisc = sum * 0.1;
+        fprintf(fbill,"\n%%10 discount:                -%.2f",yuzellidisc);
+        sum -= yuzellidisc;
+    }
+    sum -= stddisc;
+    fprintf(fbill,"\n---------------------------------------\n");
+    fprintf(fbill,"\nPrice:                        %.2f",sum);
+    vat = sum * 18 / 100;
+    sum = sum + vat; //VAT value calculated before student discount, and added to price payable.
+    fprintf(fbill,"\nPrice + VAT:                  %.2f\n",sum);
+    printf("\n---------------------------------------\n");
+    
+    fclose(fbill);
     return 0;
 }
+
+void billtoterminal(){
+    fbill = fopen("bill.txt","r");
+    int c;
+    printf("\n\nHere is your bill: \n\n");
+    while(1){
+        c = fgetc(fbill);
+        if(c == EOF){
+            break;
+        }
+        printf("%c",c);
+    }
+    printf("\n");
+    fclose(fbill);
+}
+
+
 
 int rps(){
     srand(time(NULL));
