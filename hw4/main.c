@@ -50,18 +50,14 @@ float total(float sum){
         case 'y':
         case 'Y':
             stddisc = sum * 12.5 / 100;
-            sum -= stddisc;
+            
             fprintf(fbill,"\nStudent Discount:            -%.2f",stddisc);
 
             flag = 1;
             break;
         case 'N':
         case 'n':
-            if(sum >=150){
-                yuzellidisc = sum * 0.1;
-                fprintf(fbill,"\n%%10 discount:                -%.2f",yuzellidisc);
-                sum -= yuzellidisc;
-            }
+
             flag = 1;
             break;
         default:
@@ -69,13 +65,18 @@ float total(float sum){
             break;
         }
     }
-
+    if(sum >=150){
+        yuzellidisc = sum * 0.1;
+        fprintf(fbill,"\n%%10 discount:                -%.2f",yuzellidisc);
+        sum -= yuzellidisc;
+    }
+    sum -= stddisc;
     fprintf(fbill,"\n---------------------------------------\n");
     fprintf(fbill,"\nPrice:                        %.2f",sum);
     vat = sum * 18 / 100;
     sum = sum + vat; //VAT value calculated before student discount, and added to price payable.
     fprintf(fbill,"\nPrice + VAT:                  %.2f\n",sum);
-    fprintf(fbill,"\n---------------------------------------\n");
+    printf("\n---------------------------------------\n");
     
     fclose(fbill);
     return 0;
@@ -89,7 +90,7 @@ int billing(){
 
     time_t t;
     t = time(NULL);
-    char arr[30];
+    char arr[30]; // I needed to use an array to use strftime because you said use this function.
     strftime(arr,sizeof(arr),"%d.%m.%Y/%H:%M",localtime(&t));
 
     fprintf(fbill,"%s",arr);
@@ -104,15 +105,15 @@ int billing(){
     while(1){
         int boslukcu = 1;
         int choose = 99;
-        while (choose < 1 || choose > 10){
-            printf("\nPlease choose a product (1-10): ");
+        while (choose < 1 || choose > 12){
+            printf("\nPlease choose a product (1-12): ");
             scanf("%d",&choose);
-            choose += 2;
-            if((choose < 1 || choose > 10)){
+            if((choose < 1 || choose > 12)){
                 printf("Please enter a valid selection!!\n");
             }
             getchar();
         }
+        choose += 2;
 
         printf("\n");
         while(1){
