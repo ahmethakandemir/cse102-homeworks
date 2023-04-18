@@ -4,7 +4,10 @@ int part1();
 int lowercase(int);
 int part3();
 int drawingBoard(int,int,char);
-int checktie();
+int check();
+int again();
+int part2();
+
 
 int player = 2;
 int board[3][3] = {0};
@@ -12,8 +15,21 @@ int board[3][3] = {0};
 
 int main(){
     //part1();
-    part3();
+    part2();
+    //part3();
 }
+
+int part2(){
+
+    
+
+
+    return 1;
+}
+
+
+
+
 
 int part1(){
 
@@ -60,7 +76,6 @@ int lowercase(int c){
 
 
 int part3(){
-    
     char p,move;
     int x,y;
 
@@ -73,31 +88,55 @@ int part3(){
         move = 'x';
     }
 
-    printf("Player %d's Turn(%c): ", player % 2 + 1,move);
-    while(1){
-        scanf("%d %d",&x,&y);
-        if((x >= 0 && x <= 2) && (y >= 0 && y <= 2)){
-            break;
+        printf("Player %d's Turn(%c): ", player % 2 + 1,move);
+        while(1){
+            scanf("%d %d",&x,&y);
+            if((x >= 0 && x <= 2) && (y >= 0 && y <= 2)){
+                break;
+            }
+            printf("please enter valid numbers!!: \n");
+            getchar();
         }
-        printf("please enter valid numbers!!: \n");
-        getchar();
+
+        drawingBoard(x,y,move);
+        player++;
+
+        if(check()){
+            if(!again()){
+                return 0;
+            }
+        }
+        
+        
     }
-
-    drawingBoard(x,y,move);
-    player++;
-
-    if(checktie()){
-        return 0;
-    }
-
-
-    }
-    // tahtanin dolulugunu ya da oyunun galibi olup olmadigini kontrol et sonra tekrar oynamak istiyor mu diye sor..
-
-
-
     return 0;
 }
+
+int again(){
+    char secim;
+    for(int i = 0; i < 3; i++){
+        for(int k = 0; k < 3; k++){
+            board[i][k] = 0;
+        }
+    }
+    printf("\ndo you want to play again??: ");
+    if(scanf(" %c",&secim) == 1){
+        switch (secim)
+        {
+        case 'y':case 'Y':
+            return 1;
+            break;
+        case 'n':case 'N':
+            return 0;
+        default:
+            printf("\ninvalid input!");
+            again();
+        }
+        
+    }
+    return 0;
+}   
+
 
 int drawingBoard(int i,int k,char type){
     printf("\n");
@@ -124,7 +163,7 @@ int drawingBoard(int i,int k,char type){
     return 1;
 }
 
-int checktie(){
+int check(){
     for(int i = 0; i < 3; i++){
 
         if(board[i][0] == board[i][1] && board[i][0] == board[i][2]){
@@ -150,8 +189,8 @@ int checktie(){
             }
         }
     }
-    int sum;
-    for(int i = 0,sum = 0;i < 3;i++){
+    int sum = 0;
+    for(int i = 0;i < 3;i++){
         sum += board[i][i];
     }
     if(sum == 333){
@@ -183,3 +222,5 @@ int checktie(){
 
 
 }
+
+
