@@ -6,7 +6,6 @@ int part3();
 int drawingBoard(int,int,char);
 int check();
 int again();
-int part2();
 
 
 int player = 2;
@@ -14,20 +13,9 @@ int board[3][3] = {0};
 
 
 int main(){
-    //part1();
-    part2();
+    part1();
     //part3();
 }
-
-int part2(){
-
-    
-
-
-    return 1;
-}
-
-
 
 
 

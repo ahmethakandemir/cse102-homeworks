@@ -12,3 +12,4 @@ Ayran     10.00
 Kola      12.00
 Mocha     40.25
 Latte     30.50
+Cay       5.00

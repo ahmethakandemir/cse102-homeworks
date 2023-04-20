@@ -12,9 +12,9 @@ FILE * fmenu; // open the menu file
 FILE * fbill; // open the file which will be our bill file.
 
 int main(){
-    //menuing();
-    //billing();
-    rps(); // rock paper scissors.
+    menuing();
+    billing();
+    //rps(); // rock paper scissors.
 }
 int menuing(){  // printinh the menu function
     fmenu = fopen("menu.txt","r");
@@ -74,10 +74,10 @@ int billing(){  // printing the bill.
     while(1){ // this while loop is for printing the selection to the bill until 0 is pressed.
         int boslukcu = 1; // i used this variable to arrange spaces in bill to make it look less messy.
         int choose = 99; // this can be anything except 1,12.
-        while (choose < 1 || choose > 12){  // prompt until user enters a valid value.
-            printf("\nPlease choose a product (1-12): ");
+        while (choose < 1 || choose > 13){  // prompt until user enters a valid value.
+            printf("\nPlease choose a product (1-13): ");
             scanf("%d",&choose);
-            if((choose < 1 || choose > 12)){
+            if((choose < 1 || choose > 13)){
                 printf("Please enter a valid selection!!\n");
             }
             getchar();
