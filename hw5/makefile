@@ -1,15 +1,15 @@
-all: clear compile run clean
-
-compile: 
-	@gcc main.c -o test
-run:
-	@./test
-clean:
-	@rm -f test
+all: clear part1 part2 part3
 clear:
 	clear
+part1:
+	@gcc part1.c -lm -o test1
+	@./test1
+	@rm -f test1
 part2:
-	clear
-	@gcc part2.c -lm -o test
-	@./test
-	@rm -f test
+	@gcc part2.c -lm -o test2
+	@./test2
+	@rm -f test2
+part3:
+	@gcc part3.c -lm -o test3
+	@./test3
+	@rm -f test3
