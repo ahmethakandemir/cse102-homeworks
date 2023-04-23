@@ -9,7 +9,7 @@
 
 void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100][6],double price[100]){
     FILE * products;
-    
+    printf("new code\n");
     
     int c,productLines = 0,i = 0;
 
@@ -17,13 +17,15 @@ void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100]
     while(1){
         c = fgetc(products);
         if(c == EOF){
+            productLines++;
             break;
         }
-        else if(c == '\n'){
+        else if(c == 10){
             productLines++;
         }
         
     }
+
     fclose(products);
     products = fopen("products.txt","r");
 
@@ -48,13 +50,13 @@ void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100]
             letindex++;
             if (letindex + 1 == 6) break;
         }
-        //printf("\nc is :: %c\n",c);
+        c = fgetc(products);
+
         fscanf(products,"%lf",&price[i]);
         
-        
         c = fgetc(products);
-        
-        printf("\nc is :: %d\n",c);
+        //printf("\nc is :: %c\n",c);
+
         
         if(c == EOF){
             break;
