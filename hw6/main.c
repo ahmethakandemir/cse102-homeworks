@@ -8,13 +8,29 @@
 
 
 void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100][6],double price[100]){
-    FILE * products = fopen("products.txt","r");
-    FILE * stocks = fopen("stocks.txt","r");
+    FILE * products;
+    
     
     int c,productLines = 0,i = 0;
-    while (1)   // getting the line count
+
+    products = fopen("products.txt","r");
+    while(1){
+        c = fgetc(products);
+        if(c == EOF){
+            break;
+        }
+        else if(c == '\n'){
+            productLines++;
+        }
+        
+    }
+    fclose(products);
+    products = fopen("products.txt","r");
+
+    for(int i = 0; i < productLines; i++) 
     {
         int letter = 0,letindex = 0;
+        
         fscanf(products,"%d",&pid[i]);
         c = fgetc(products);
         fscanf(products,"%c",&type[i]);
@@ -35,30 +51,27 @@ void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100]
         //printf("\nc is :: %c\n",c);
         fscanf(products,"%lf",&price[i]);
         c = fgetc(products);
-        //printf("\nc is :: %c\n",c);
-        i++;
+        
+        printf("\nc is :: %c\n",c);
+
 
         if(c == EOF){
-            productLines++;
             break;
         }
-        if(c == '\n'){
-            printf("newline"); // girmiyorrrrrrrrr
-            productLines++;
-        }
+
 
     }
 
     fclose(products);
-    fclose(stocks);
+    
 
 }
 int main(){
-    int pid[100] = 0;
-    char type[100] = 0;
-    char name[100][9] = 0;
-    char brand[100][6] = 0;
-    double price[100] = 0;
+    int pid[100] = {0};
+    char type[100] = {0};
+    char name[100][9] = {0};
+    char brand[100][6] = {0};
+    double price[100] = {0};
 
     puttingArrays(pid,type,name,brand,price);
     
