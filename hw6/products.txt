@@ -1,2 +1,4 @@
 1,D,Ayran,Sutas,20.5
 2,F,Simit,Firin,8.0
+3,F,hakan,ebrar,23.12
+4,F,kurabiye,hakan,14.02

@@ -42,7 +42,7 @@ void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100]
         while ((letter = fgetc(products)) != ',' && letter != '\n') {
             name[i][letindex] = letter;
             letindex++;
-            if (letindex + 1 == 9) break;
+            if (letindex + 1 == 10) break;
         }
         letindex = 0;letter = 0;
         while ((letter = fgetc(products)) != ',' && letter != '\n') {
@@ -81,6 +81,6 @@ int main(){
 
     puttingArrays(pid,type,name,brand,price);
     
-    for(int i = 0;i< 2;i++)
+    for(int i = 0;i< 4;i++)
         printf("\n pid is : %d\n type is : %c\n name is : %s\n brand is : %s\n price is : %lf\n\n",pid[i],type[i],name[i], brand[i], price[i]);
 }
