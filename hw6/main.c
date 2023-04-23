@@ -43,11 +43,7 @@ void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100]
             if (letindex + 1 == 9) break;  /* prevent writing beyond array */
         }
         letindex = 0;letter = 0;
-        while ((letter = fgetc(products)) != ',' && letter != '\n') {
-            brand[i][letindex] = letter;
-            letindex++;
-            if (letindex + 1 == 6) break;  /* prevent writing beyond array */
-        }
+        fgets(brand[i],products);
         //printf("\nc is :: %c\n",c);
         fscanf(products,"%lf",&price[i]);
         c = fgetc(products);
