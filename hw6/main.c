@@ -50,14 +50,20 @@ void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100]
         }
         //printf("\nc is :: %c\n",c);
         fscanf(products,"%lf",&price[i]);
+        
+        
         c = fgetc(products);
         
-        printf("\nc is :: %c\n",c);
-
-
+        printf("\nc is :: %d\n",c);
+        
         if(c == EOF){
             break;
         }
+        else if(c == 10){
+            continue;
+        }
+
+
     }
 
     fclose(products);

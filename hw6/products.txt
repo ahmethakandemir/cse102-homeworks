@@ -1,2 +1,2 @@
-1,D,Ayran,Sutas,20.5
+1,D,Ayran,Sutas
 2,F,Simit,Firin,8.0
