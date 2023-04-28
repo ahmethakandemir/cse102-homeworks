@@ -20,6 +20,7 @@ void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100]
         }
         
     }
+    printf("product lines when created: %d",productLines);
 
     fclose(products);
     products = fopen("products.txt","r");
@@ -124,6 +125,7 @@ int addProduct(int pid[100],char type[100],char name[100][9],char brand[100][6],
     printf("\nEnter the new product(pID is auto incremented)(type,name,brand,price): ");
     productLines++;
     scanf("%c,%s,%s,%lf",&type[productLines],name[productLines],brand[productLines],&price[productLines]);
+    printf("product lines is: %d",productLines);
     pid[productLines] = pid[productLines - 1] + 1;
     //printf("\n%d,%c,%s,%s,%lf",pid[productLines],type[productLines],name[productLines],brand[productLines],price[productLines]);
     updateTxts(pid,type,name,brand,price,sid,stockpid,branch,current_stock,productLines,stockLines);
@@ -135,6 +137,7 @@ void submenuFile(int pid[100],char type[100],char name[100][9],char brand[100][6
     printf("\n\n1- Add new product\n2- Delete a product\n3- Update a product\n4- Add feature to product\n5- Add a new stock entry\n6- Delete a stock entry\n7- Update a stock entry\n8- Back to main menu\n\n");
     int selection;
     while(1){
+        printf("Please make a selection: ");
         scanf("%d",&selection);
         if(selection <= 8 && selection >= 1){
             break;
@@ -167,6 +170,7 @@ void mainMenu(int pid[100],char type[100],char name[100][9],char brand[100][6],d
         }
         else{
             printf("\nInvalid selection! Please enter your selection again! : ");
+
             while(getchar() != '\n');
         }
     }
@@ -180,15 +184,6 @@ void mainMenu(int pid[100],char type[100],char name[100][9],char brand[100][6],d
     default:    break;
     }
 }
-
-
-
-
-
-
-
-
-
 
 
 int main(){
@@ -206,7 +201,7 @@ int main(){
     char branch[100][15] = {0};
     int current_stock[100] = {0};
 
-    puttingArrays(pid,type,name,brand,price,sid,stockpid,branch,current_stock,0,0);
+    puttingArrays(pid,type,name,brand,price,sid,stockpid,branch,current_stock,productLines,stockLines);
     printf("\n\n%d\n\n",productLines);
     mainMenu(pid,type,name,brand,price,sid,stockpid,branch,current_stock,productLines,stockLines);
 
