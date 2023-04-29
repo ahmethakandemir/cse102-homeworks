@@ -1,34 +1,31 @@
 #include <stdio.h>
-int fillarrays(int pid[100], char brand[100][8],char name[100][5],double price[100],char type[100], FILE *products){
-    
-    products = fopen("product.txt","r");
+int fillarrays(int pid[100], char brand[100][8],char name[100][5],double price[100],char type[100], FILE *products){ 
+  
+   products = fopen("product.txt","r");
     int c;
 	int nl = -1, i;
 	
 	while(1){
-		printf("new code\n");
     	c = fgetc(products);
 		//printf("\n%c\n",c);
     	if(c == EOF){
-    		printf("new codex\n");
     		nl++;
     		break;	
     	}	
     	if(c == 10){
-    		printf("new codey\n");
     		nl++;
-    	}
-    	//printf("new line is = %d\n",nl);	
+    	}	
     }
-    printf("new code\n");
     fclose(products);
     products = fopen("product.txt","r");
-    for(i=0; i<nl; i++){
-    	fscanf(products,"%d", &pid[i]);
-    	fscanf(products,"%lf", &price[i]);
-		fscanf(products,"%c", &type[i]);
-    
+	i=0;
+	
+    for(int i = 0; i < nl; i++){
+    	fscanf(products,"%d,%c,%s,%s,%lf", &pid[i], &type[i], name[i], brand[i], &price[i]);
     }
+
+
+
     fclose(products);
     return 0;
 
@@ -76,7 +73,7 @@ int addproduct(int pid[100], char brand[100][8],char name[100][5],double price[1
     //fseek(products, 0, SEEK_END);
     //fprintf(products,"%d,%c,%s,%s,%lf\n", nl, type[nl], name[nl], brand[nl], price[nl]);
     //fclose(products);
-    return 0;
+    return fillarrays(pid, brand, name, price, type, products);
 }
 int deleteproduct(int pid[100], char brand[100][8],char name[100][5],double price[100],char type[100], FILE *products){
 	printf("\nYou are about to delete a product from the file");
@@ -109,7 +106,6 @@ int deleteproduct(int pid[100], char brand[100][8],char name[100][5],double pric
     	}	
     }
     fclose(products);
-	return 0;
 }
 
 int main(){
@@ -120,11 +116,11 @@ int main(){
 	char name[100][5]={0};
 	double price[100]={0};
 	char type[100]={0};
-	fillarrays(pid, brand, name, price, type, fproduct);
-	//addproduct(pid,brand,name,price,type,fproduct);
+	
+	addproduct(pid,brand,name,price,type,fproduct);
 	//deleteproduct(pid,brand,name,price,type,fproduct);
-	 for(int i = 0;i< 4;i++)
-        printf("\n pid is : %d\n type is : %c\n price is : %lf\n\n",pid[i],type[i], price[i]);
+	for(int i = 0;i< 8;i++)
+        printf("\n pid is : %d\n type is : %c\n name is: %s\n brand is: %s\n price is : %lf\n\n",pid[i],type[i], name[i], brand[i],price[i]);
 	return 0;
 	
 }

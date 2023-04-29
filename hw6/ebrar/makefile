@@ -1,9 +1,11 @@
-all: clear compile run clean
-clear:
-	clear
+all: compile run clean
+
 compile:
-	@gcc a1.c -o test
-run:
+	@gcc a1.c -o test -lm
+
+run: 
 	@./test
 clean:
-	@rm test
+	@rm -f test
+clear:
+	clear

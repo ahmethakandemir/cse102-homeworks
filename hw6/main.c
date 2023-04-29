@@ -1,31 +1,50 @@
 #include <stdio.h>
  
-void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100][6],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100],int productLines, int stockLines){
+int stockLinesfunc(){
+    FILE * stocks;
+    int stockLinecount = 0,c;
+    stocks = fopen("stocks.txt","r");
+    while(1){
+        c = fgetc(stocks);
+        if(c == EOF){
+            stockLinecount++;
+            break;
+        }
+        else if(c == 10){
+            stockLinecount++;
+        }
+    }
+    fclose(stocks);
+    return stockLinecount;
+}
+
+int productLinesfunc(){
+    FILE * products;
+    int productsLinecount = 0,c;
+    products = fopen("products.txt","r");
+    while(1){
+        c = fgetc(products);
+        if(c == EOF){
+            productsLinecount++;
+            break;
+        }
+        else if(c == 10){
+            productsLinecount++;
+        }
+    }
+    fclose(products);
+    return productsLinecount;
+}
+void puttingArrays(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100]){
     FILE * products;
     FILE * stocks;
     //printf("new code\n");
     
     int c,i = 0;
 
-
     products = fopen("products.txt","r");
-    while(1){
-        c = fgetc(products);
-        if(c == EOF){
-            productLines++;
-            break;
-        }
-        else if(c == 10){
-            productLines++;
-        }
-        
-    }
-    printf("product lines when created: %d",productLines);
-
-    fclose(products);
-    products = fopen("products.txt","r");
-
-    for(int i = 0; i < productLines; i++) 
+    int productLines = productLinesfunc();
+    for(int i = 0; i < productLines + 1; i++) 
     {
         int letter = 0,letindex = 0;
         
@@ -38,13 +57,13 @@ void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100]
         while ((letter = fgetc(products)) != ',' && letter != '\n') {
             name[i][letindex] = letter;
             letindex++;
-            if (letindex + 1 == 10) break;
+            if (letindex + 1 == 15) break;
         }
         letindex = 0;letter = 0;
         while ((letter = fgetc(products)) != ',' && letter != '\n') {
             brand[i][letindex] = letter;
             letindex++;
-            if (letindex + 1 == 6) break;
+            if (letindex + 1 == 15) break;
         }
         c = fgetc(products);
 
@@ -60,23 +79,12 @@ void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100]
         }
     }
     fclose(products);
-    stockLines = 0;
-    stocks = fopen("stocks.txt","r");
-    while(1){
-        c = fgetc(stocks);
-        if(c == EOF){
-            stockLines++;
-            break;
-        }
-        else if(c == 10){
-            stockLines++;
-        }
-    }
-    fclose(stocks);
+
     // kesinlikle tamamlanmamis bir fikir.................................
     stocks = fopen("stocks.txt","r");
     int letter,letindex;
-    for(int i = 0; i < stockLines; i++){
+    int stockLines = stockLinesfunc();
+    for(int i = 0; i < stockLinesfunc(); i++){
         
         fscanf(stocks,"%d",&sid[i]);
         //printf("sid[i] is %d",sid[i]);
@@ -105,13 +113,15 @@ void puttingArrays(int pid[100],char type[100],char name[100][9],char brand[100]
 }
 
 
-int updateTxts(int pid[100],char type[100],char name[100][9],char brand[100][6],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100],int productLines, int stockLines){
+int updateTxts(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100]){
+    int productLines = productLinesfunc();
+    int stockLines = stockLinesfunc();
     FILE * products = fopen("products.txt","w");
     FILE * stocks = fopen("stocks.txt","w");
-    for(int i = 0;i < productLines; i++){
+    for(int i = 0;i < productLines + 1; i++){
         fprintf(products,"%d,%c,%s,%s,%lf\n",pid[i],type[i],name[i],brand[i],price[i]);
     }
-    for(int i = 0;i < stockLines; i++){
+    for(int i = 0;i < stockLines + 1; i++){
         fprintf(stocks,"%d,%d,%s,%d\n",sid[i],stockpid[i],branch[i],current_stock[i]);
     }
 
@@ -121,19 +131,26 @@ int updateTxts(int pid[100],char type[100],char name[100][9],char brand[100][6],
     return 0;
 }
 
-int addProduct(int pid[100],char type[100],char name[100][9],char brand[100][6],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100],int productLines, int stockLines){
+int addProduct(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100]){
     printf("\nEnter the new product(pID is auto incremented)(type,name,brand,price): ");
-    productLines++;
-    scanf("%c,%s,%s,%lf",&type[productLines],name[productLines],brand[productLines],&price[productLines]);
-    printf("product lines is: %d",productLines);
-    pid[productLines] = pid[productLines - 1] + 1;
+    FILE * products = fopen("products.txt","a");
+    int productLines = productLinesfunc();
+    char temptype,tempname[15],tempbrand[15];
+    double tempprice;
+    scanf(" %c,%[^,],%[^,],%lf", &temptype, tempname, tempbrand, &tempprice);
+    printf("\ntemps : type = %c , name = %s, brand = %s, price = %.1lf\n",temptype,tempname,tempbrand,tempprice);
+    fprintf(products,"\n%d,%c,%s,%s,%.2lf",productLines + 1,temptype,tempname,tempbrand,tempprice);
     //printf("\n%d,%c,%s,%s,%lf",pid[productLines],type[productLines],name[productLines],brand[productLines],price[productLines]);
-    updateTxts(pid,type,name,brand,price,sid,stockpid,branch,current_stock,productLines,stockLines);
+	fclose(products);
+    puttingArrays(pid,type,name,brand,price,sid,stockpid,branch,current_stock);
+    products = fopen("products.txt","r");
+    for(int i = 0;i < productLinesfunc();i++)
+        printf("\n%d,%c,%s,%s,%.2lf\n",pid[i],type[i], name[i], brand[i],price[i]);
+    fclose(products);
     return 0;
-
 }
-void submenuFile(int pid[100],char type[100],char name[100][9],char brand[100][6],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100],int productLines, int stockLines){
-    void mainMenu(int pid[100],char type[100],char name[100][9],char brand[100][6],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100],int productLines, int stockLines);
+void submenuFile(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100]){
+    void mainMenu(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100]);
     printf("\n\n1- Add new product\n2- Delete a product\n3- Update a product\n4- Add feature to product\n5- Add a new stock entry\n6- Delete a stock entry\n7- Update a stock entry\n8- Back to main menu\n\n");
     int selection;
     while(1){
@@ -148,19 +165,19 @@ void submenuFile(int pid[100],char type[100],char name[100][9],char brand[100][6
         }
     }
     switch (selection){
-    case 1: addProduct(pid,type,name,brand,price,sid,stockpid,branch,current_stock,productLines,stockLines);    break;
+    case 1: addProduct(pid,type,name,brand,price,sid,stockpid,branch,current_stock);    break;
     case 2:     break;
     case 3:     break;
     case 4:     break;
     case 5:     break;
     case 6:     break;
     case 7:     break;
-    case 8: mainMenu(pid,type,name,brand,price,sid,stockpid,branch,current_stock,productLines,stockLines);     break;
+    case 8: mainMenu(pid,type,name,brand,price,sid,stockpid,branch,current_stock);     break;
     default:    break;
     }
 }
 
-void mainMenu(int pid[100],char type[100],char name[100][9],char brand[100][6],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100],int productLines, int stockLines){
+void mainMenu(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100]){
     int selection;
     printf("\n\nMain Menu:\n1- File Operations\n2- Query products\n3- Check stock status\n4- Stock control by brand\n5- Export report\n\nPlease make a selection: ");
     while(1){
@@ -176,7 +193,7 @@ void mainMenu(int pid[100],char type[100],char name[100][9],char brand[100][6],d
     }
 
     switch (selection){
-    case 1:submenuFile(pid,type,name,brand,price,sid,stockpid,branch,current_stock,productLines,stockLines);break;
+    case 1:submenuFile(pid,type,name,brand,price,sid,stockpid,branch,current_stock);break;
     case 2:     break;
     case 3:     break;
     case 4:     break;
@@ -187,13 +204,12 @@ void mainMenu(int pid[100],char type[100],char name[100][9],char brand[100][6],d
 
 
 int main(){
-    int productLines = 0;
-    int stockLines = 0;
+
     // product.txt arrays
     int pid[100] = {0};
     char type[100] = {0};
-    char name[100][9] = {0};
-    char brand[100][6] = {0};
+    char name[100][15] = {0};
+    char brand[100][15] = {0};
     double price[100] = {0};
     // stocks.txt arrays
     int stockpid[100] = {0};
@@ -201,9 +217,9 @@ int main(){
     char branch[100][15] = {0};
     int current_stock[100] = {0};
 
-    puttingArrays(pid,type,name,brand,price,sid,stockpid,branch,current_stock,productLines,stockLines);
-    printf("\n\n%d\n\n",productLines);
-    mainMenu(pid,type,name,brand,price,sid,stockpid,branch,current_stock,productLines,stockLines);
+    puttingArrays(pid,type,name,brand,price,sid,stockpid,branch,current_stock);
+
+    mainMenu(pid,type,name,brand,price,sid,stockpid,branch,current_stock);
 
 
 }
