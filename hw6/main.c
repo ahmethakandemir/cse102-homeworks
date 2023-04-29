@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <string.h>
+
 int stockLinesfunc(){
     FILE * stocks;
     int stockLinecount = 0,c;
@@ -111,9 +111,12 @@ void puttingArrays(int pid[100],char type[100],char name[100][15],char brand[100
 
 }
 
-
-int updateProdArrays(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100]){
+int updateProdArrays(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int deletion){
+    
     int productLines = productLinesfunc();
+    if(deletion){
+        productLines--;
+    }
     FILE * products = fopen("products.txt","w");
     for(int i = 0;i < productLines; i++){
         fprintf(products,"%d,%c,%s,%s,%lf",pid[i],type[i],name[i],brand[i],price[i]);
@@ -124,6 +127,76 @@ int updateProdArrays(int pid[100],char type[100],char name[100][15],char brand[1
     fclose(products);
     return 0;
 }
+
+int updateProduct(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100]){
+
+    int upid;
+    char upfeature[10];
+    printf("\nenter the pid of the product you want to update: ");
+
+    while(1){
+        scanf("%d",&upid);
+        if(upid < 1 || upid > productLinesfunc()){
+            printf("\nInvalid selection! Please enter your selection again! : ");
+            while(getchar() != '\n'); 
+        }
+        else{
+            break;
+        }
+    }
+    printf("\nwhich feature you want to update?(pid can't be changed): ");
+    while(1){
+
+        scanf("%s",upfeature);
+        for(int i = 0;i < 6;i++){
+            if (upfeature[i] <= 90 && upfeature[i] >= 65){
+                upfeature[i] += 32;
+            }
+            else if(upfeature[i] <= 122 && upfeature[i] >= 97){}
+        }
+
+    if(upfeature[0] == 't'){
+        char k;
+        printf("\nenter the new type for the product: ");
+        scanf(" %c",&k);
+        type[upid - 1] = k;
+        break;
+    }
+    else if(upfeature[0] == 'n'){
+        printf("\nenter the new name for the product: ");
+        char k[15];
+        scanf(" %s",k);
+        for(int i = 0; i < 15;i++){
+            name[upid - 1][i] = k[i]; 
+        }
+        break;
+    }
+    else if(upfeature[0] == 'b'){
+        printf("\nenter the new brand for the product: ");
+        char k[15];
+        scanf(" %s",k);
+        for(int i = 0; i < 15;i++){
+            brand[upid - 1][i] = k[i]; 
+        }
+        break;
+    }
+    else if(upfeature[0] == 'p'){
+        printf("\nenter the new price for the product: ");
+        double k;
+        scanf("%lf",&k);
+        price[upid - 1] = k;
+        break;
+    }
+    else{
+        printf("\nError getting the feature!!!, please enter again: \n");
+    }
+    }    
+
+    updateProdArrays(pid,type,name,brand,price,0);
+    return 0;
+}
+
+
 
 int addProduct(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100]){
     printf("\nEnter the new product(pID is auto incremented)(type,name,brand,price): ");
@@ -159,17 +232,21 @@ int deleteProduct(int pid[100],char type[100],char name[100][15],char brand[100]
     }
     for(int i = 0; i < productLinesfunc(); i++){
         if(deletedpid == pid[i]){
-            for (int j = i; j < productLinesfunc() - 1; j++) {
-                pid[j] = pid[j+1];
-                strcpy(&type[j], &type[j+1]);
-                strcpy(name[j], name[j+1]);
-                strcpy(brand[j], brand[j+1]);
-                price[j] = price[j+1];
+            for (int j = i; j < productLinesfunc(); j++) {
+                //pid[j] = pid[j+1];
+                type[j] = type[j + 1];
+                for(int k = 0;k < 14;k++){
+                    name[j][k] = name[j + 1][k];
+                }
+                for(int k = 0;k < 14;k++){
+                    brand[j][k] = brand[j + 1][k];
+                }
+                price[j] = price[j + 1];
             }
             break;
         }
     }
-
+    updateProdArrays(pid,type,name,brand,price,1);
     return 0;
 }
 void submenuFile(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100]){
@@ -188,16 +265,17 @@ void submenuFile(int pid[100],char type[100],char name[100][15],char brand[100][
         }
     }
     switch (selection){
-    case 1: addProduct(pid,type,name,brand,price,sid,stockpid,branch,current_stock);    break;
-    case 2: deleteProduct(pid,type,name,brand,price);   break;
-    case 3:     break;
+    case 1: addProduct(pid,type,name,brand,price,sid,stockpid,branch,current_stock);break;
+    case 2: deleteProduct(pid,type,name,brand,price);break;
+    case 3: updateProduct(pid,type,name,brand,price);break;
     case 4:     break;
     case 5:     break;
     case 6:     break;
-    case 7: updateProdArrays(pid,type,name,brand,price);    break;
-    case 8: mainMenu(pid,type,name,brand,price,sid,stockpid,branch,current_stock);     break;
+    case 7:     break;
+    case 8:     break;
     default:    break;
     }
+    mainMenu(pid,type,name,brand,price,sid,stockpid,branch,current_stock);
 }
 
 void mainMenu(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100]){
