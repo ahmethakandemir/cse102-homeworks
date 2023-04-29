@@ -65,7 +65,6 @@ void puttingArrays(int pid[100],char type[100],char name[100][15],char brand[100
             letindex++;
             if (letindex + 1 == 15) break;
         }
-        c = fgetc(products);
 
         fscanf(products,"%lf",&price[i]);
         
@@ -113,21 +112,16 @@ void puttingArrays(int pid[100],char type[100],char name[100][15],char brand[100
 }
 
 
-int updateTxts(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100]){
+int updateProdArrays(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100]){
     int productLines = productLinesfunc();
-    int stockLines = stockLinesfunc();
     FILE * products = fopen("products.txt","w");
-    FILE * stocks = fopen("stocks.txt","w");
-    for(int i = 0;i < productLines + 1; i++){
-        fprintf(products,"%d,%c,%s,%s,%lf\n",pid[i],type[i],name[i],brand[i],price[i]);
+    for(int i = 0;i < productLines; i++){
+        fprintf(products,"%d,%c,%s,%s,%lf",pid[i],type[i],name[i],brand[i],price[i]);
+        if(i < productLines - 1){
+            fprintf(products,"\n");
+        }
     }
-    for(int i = 0;i < stockLines + 1; i++){
-        fprintf(stocks,"%d,%d,%s,%d\n",sid[i],stockpid[i],branch[i],current_stock[i]);
-    }
-
     fclose(products);
-    fclose(stocks);
-
     return 0;
 }
 
@@ -139,7 +133,7 @@ int addProduct(int pid[100],char type[100],char name[100][15],char brand[100][15
     double tempprice;
     scanf(" %c,%[^,],%[^,],%lf", &temptype, tempname, tempbrand, &tempprice);
     printf("\ntemps : type = %c , name = %s, brand = %s, price = %.1lf\n",temptype,tempname,tempbrand,tempprice);
-    fprintf(products,"\n%d,%c,%s,%s,%.2lf",productLines + 1,temptype,tempname,tempbrand,tempprice);
+    fprintf(products,"\n%d,%c,%s,%s,%lf",productLines + 1,temptype,tempname,tempbrand,tempprice);
     //printf("\n%d,%c,%s,%s,%lf",pid[productLines],type[productLines],name[productLines],brand[productLines],price[productLines]);
 	fclose(products);
     puttingArrays(pid,type,name,brand,price,sid,stockpid,branch,current_stock);
@@ -147,6 +141,35 @@ int addProduct(int pid[100],char type[100],char name[100][15],char brand[100][15
     for(int i = 0;i < productLinesfunc();i++)
         printf("\n%d,%c,%s,%s,%.2lf\n",pid[i],type[i], name[i], brand[i],price[i]);
     fclose(products);
+    return 0;
+}
+
+int deleteProduct(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100]){
+    int deletedpid;
+    printf("\nEnter the pID of the product you want to delete: ");
+    while(1){
+        scanf("%d",&deletedpid);
+        if(deletedpid < 1 || deletedpid > productLinesfunc()){
+            printf("\nInvalid selection! Please enter your selection again! : ");
+            while(getchar() != '\n'); 
+        }
+        else{
+            break;
+        }
+    }
+    for(int i = 0; i < productLinesfunc(); i++){
+        if(deletedpid == pid[i]){
+            for (int j = i; j < productLinesfunc() - 1; j++) {
+                pid[j] = pid[j+1];
+                strcpy(type[j], type[j+1]);
+                strcpy(name[j], name[j+1]);
+                strcpy(brand[j], brand[j+1]);
+                price[j] = price[j+1];
+            }
+            break;
+        }
+    }
+
     return 0;
 }
 void submenuFile(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100]){
@@ -166,12 +189,12 @@ void submenuFile(int pid[100],char type[100],char name[100][15],char brand[100][
     }
     switch (selection){
     case 1: addProduct(pid,type,name,brand,price,sid,stockpid,branch,current_stock);    break;
-    case 2:     break;
+    case 2: deleteProduct(pid,type,name,brand,price);   break;
     case 3:     break;
     case 4:     break;
     case 5:     break;
     case 6:     break;
-    case 7:     break;
+    case 7: updateProdArrays(pid,type,name,brand,price);    break;
     case 8: mainMenu(pid,type,name,brand,price,sid,stockpid,branch,current_stock);     break;
     default:    break;
     }
