@@ -1,5 +1,5 @@
 #include <stdio.h>
- 
+#include <string.h>
 int stockLinesfunc(){
     FILE * stocks;
     int stockLinecount = 0,c;
@@ -161,7 +161,7 @@ int deleteProduct(int pid[100],char type[100],char name[100][15],char brand[100]
         if(deletedpid == pid[i]){
             for (int j = i; j < productLinesfunc() - 1; j++) {
                 pid[j] = pid[j+1];
-                strcpy(type[j], type[j+1]);
+                strcpy(&type[j], &type[j+1]);
                 strcpy(name[j], name[j+1]);
                 strcpy(brand[j], brand[j+1]);
                 price[j] = price[j+1];
