@@ -1,7 +1,7 @@
 1,D,Ayran,Sutas,15.000000
 2,F,Simit,Firin,2.000000
-3,F,hakan,ebrar,3.120000
-4,F,kurabiye,hakan,4.020000
+3,F,Ebrar,ebrar,3.120000
+4,D,kurabiye,hakan,4.020000
 5,F,minnos,ebrar,5.000000
 6,a,a,a,6.000000
 7,b,b,b,7.000000
