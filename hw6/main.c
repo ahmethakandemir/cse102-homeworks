@@ -35,7 +35,22 @@ int productLinesfunc(){
     fclose(products);
     return productsLinecount;
 }
-void puttingArrays(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100],char newfeatures[5][100]){
+int featurecounter(){
+    FILE * products = fopen("products.txt","r");
+    int c,counter = 1;
+    while(1){
+        c = fgetc(products);
+        if(c == 10){
+            break;
+        }
+        else if(c == 44){
+            counter++;
+        }
+    }
+    fclose(products);
+    return counter;
+}
+void puttingArrays(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100],char newfeatures[5][100][15]){
     FILE * products;
     FILE * stocks;
     //printf("new code\n");
@@ -111,7 +126,7 @@ void puttingArrays(int pid[100],char type[100],char name[100][15],char brand[100
 
 }
 
-int updateProdArrays(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int deletion,char newfeatures[5][100]){
+int updateProdArrays(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int deletion,char newfeatures[5][100][15]){
     
     int productLines = productLinesfunc();
     if(deletion){
@@ -119,7 +134,10 @@ int updateProdArrays(int pid[100],char type[100],char name[100][15],char brand[1
     }
     FILE * products = fopen("products.txt","w");
     for(int i = 0;i < productLines; i++){
-        fprintf(products,"%d,%c,%s,%s,%lf",pid[i],type[i],name[i],brand[i],price[i]);
+        fprintf(products,"%d,%c,%s,%s,%.2lf",pid[i],type[i],name[i],brand[i],price[i]);
+        if(featurecounter() > 5){
+            fprintf(products,",%s",newfeatures[featurecounter() - 5][i]);
+        }
         if(i < productLines - 1){
             fprintf(products,"\n");
         }
@@ -217,7 +235,7 @@ int addProduct(int pid[100],char type[100],char name[100][15],char brand[100][15
     return 0;
 }
 
-int deleteProduct(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],char newfeatures[5][100]){
+int deleteProduct(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],char newfeatures[5][100][15]){
     int deletedpid;
     printf("\nEnter the pID of the product you want to delete: ");
     while(1){
@@ -249,20 +267,39 @@ int deleteProduct(int pid[100],char type[100],char name[100][15],char brand[100]
     updateProdArrays(pid,type,name,brand,price,1,newfeatures);
     return 0;
 }
-int addFeature(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],char newfeatures[5][100][15],int counter){
+
+
+
+int addFeature(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],char newfeatures[5][100][15]){
     printf("\nenter the name of the feature you want to add to all products: ");
     char featureName[15];
     scanf("%s",featureName);
-
+    int features = featurecounter() - 5;
     for(int i = 0; i < 100;i++){
         for(int j = 0; j < 15;j++)
-            newfeatures[counter][i][j] = NULL;
+            newfeatures[features][i][j] = 0;
     }
-    newfeatures[0][99][0] = counter;
-    counter++;
-    return counter;
-}
+    FILE * products = fopen("products.txt","a+");
+    int c,commas = 0;
 
+    while(1){
+        c = fgetc(products);
+        if(c == 44){
+            commas++;
+        }
+        else if(c == 46){
+            c = fgetc(products);c = fgetc(products);
+            fprintf(products,",");
+            break;
+        }
+
+    }
+
+
+
+    fclose(products);
+    return 0;
+}
 
 
 void submenuFile(int pid[100],char type[100],char name[100][15],char brand[100][15],double price[100],int sid[100],int stockpid[100],char branch[100][15],int current_stock[100],char newfeatures[5][100][15]){
@@ -284,7 +321,7 @@ void submenuFile(int pid[100],char type[100],char name[100][15],char brand[100][
     case 1: addProduct(pid,type,name,brand,price,sid,stockpid,branch,current_stock,newfeatures);break;
     case 2: deleteProduct(pid,type,name,brand,price,newfeatures);break;
     case 3: updateProduct(pid,type,name,brand,price,newfeatures);break;
-    case 4: addFeature(pid,type,name,brand,price,newfeatures,0);    break;
+    case 4: addFeature(pid,type,name,brand,price,newfeatures);    break;
     case 5:     break;
     case 6:     break;
     case 7:     break;
