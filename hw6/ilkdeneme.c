@@ -224,7 +224,7 @@ int addProduct(int pid[100],char type[100],char name[100][15],char brand[100][15
     char temptype,tempname[15],tempbrand[15];
     double tempprice;
     scanf(" %c,%[^,],%[^,],%lf", &temptype, tempname, tempbrand, &tempprice);
-    printf("\ntemps : type = %c , name = %s, brand = %s, price = %.1lf\n",temptype,tempname,tempbrand,tempprice);
+    //printf("\ntemps : type = %c , name = %s, brand = %s, price = %.1lf\n",temptype,tempname,tempbrand,tempprice);
     fprintf(products,"\n%d,%c,%s,%s,%lf",productLines + 1,temptype,tempname,tempbrand,tempprice);
     //printf("\n%d,%c,%s,%s,%lf",pid[productLines],type[productLines],name[productLines],brand[productLines],price[productLines]);
 	fclose(products);

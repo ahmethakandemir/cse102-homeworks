@@ -14,7 +14,7 @@ FILE * fbill; // open the file which will be our bill file.
 int main(){
     menuing();
     billing();
-    //rps(); // rock paper scissors.
+    rps(); // rock paper scissors.
 }
 int menuing(){  // printinh the menu function
     fmenu = fopen("menu.txt","r");

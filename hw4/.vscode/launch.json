@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/hakan/Desktop/cse homeworks/hw4",
-      "program": "/home/hakan/Desktop/cse homeworks/hw4/build/Debug/outDebug",
+      "cwd": "/home/hakan/Desktop/102/hw4",
+      "program": "/home/hakan/Desktop/102/hw4/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
