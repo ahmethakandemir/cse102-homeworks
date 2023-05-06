@@ -1,0 +1,10 @@
+all: clear compile run clean
+
+compile:
+	@gcc main.c -o test
+run:
+	@./test
+clear:
+	clear
+clean:
+	@rm -f test
