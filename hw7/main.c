@@ -36,7 +36,6 @@ int vectorsize(){
 }
 int read_dict(const char *  file_name, char dict[][MAX_WORD_SIZE]){
 	int i,j=0,c=0,numss,vectorss;
-	char temp;
 	FILE *fpdict;
     fpdict = fopen("dictionary.txt","r");
     numss = numwords();
@@ -74,7 +73,6 @@ int read_text(const char * text_file, const char * ignore_file, char words[][MAX
     FILE * fpinput;
     FILE * fpignore;
     char ignore[100][MAX_WORD_SIZE];
-    fpinput = fopen(text_file,"r");
     fpignore = fopen(ignore_file,"r");
     int c,counter = 0;
     while(1){
@@ -96,32 +94,73 @@ int read_text(const char * text_file, const char * ignore_file, char words[][MAX
     }
     fclose(fpignore);
     i = 0;
-    int c;
+    int k;
+    fpinput = fopen(text_file,"r");
     while(1){
         fscanf(fpinput,"%s",words[i]);
         c = fgetc(fpinput);
-        while((c >= 65 && c <= 90) || (c >= 97 && c <= 122) || (c >= 48 && c <= 57)){
-            ungetc(c,fpinput);
+        if(c == -1){
+            break;
         }
-        
-        
+        while(((c >= 65 && c <= 90) || (c >= 97 && c <= 122) || (c >= 48 && c <= 57))){
+            c = fgetc(fpinput);
+        }
+        ungetc(c,fpinput);
+        if(!((words[i][0] >= 65 && words[i][0] <= 90) || (words[i][0] >= 97 && words[i][0] <= 122) || (words[i][0] >= 48 && words[i][0] <= 57))){
+                for(int m = 0; m < MAX_WORD_SIZE + 1; m++){
+                    words[i][m] = words[i][m+1];
+                }
+                for(k = 1;k < MAX_WORD_SIZE;k++){
+                    if(!((words[i][k] >= 65 && words[i][k] <= 90) || (words[i][k] >= 97 && words[i][k] <= 122) || (words[i][k] >= 48 && words[i][k] <= 57))){
+                        words[i][k] = '\0';
+                    }
+                }
+            }
+        else{
+            for(k = 0;k < MAX_WORD_SIZE;k++){
+                if(words[i][k] == 39){
+                    for(int m = k; m < MAX_WORD_SIZE + 1; m++){
+                        words[i][m] = words[i][m+1];
+                    }
+                }
+                if(!((words[i][k] >= 0) && (words[i][k] <= 127))){
+                    //words[i][k] = ' ';
+                    i++;
+                    int e,index;
+                    for(e = k,index = 0;e < MAX_WORD_SIZE + 1;e++,index++){
+                        printf("i is : %d\n",i);
+                        printf("char is :%c\n",words[i - 1][e + 3]);
+                        words[i][index] = words[i - 1][e + 3];
+                    }
+                    for(int m = k; m < MAX_WORD_SIZE + 1; m++){
+                        words[i - 1][m] = '\0';
+                    }
+                        //printf("1. index is : %s\n",words[1]);
+
+                    
+                    
+                }
+                if(!((words[i][k] >= 65 && words[i][k] <= 90) || (words[i][k] >= 97 && words[i][k] <= 122) || (words[i][k] >= 48 && words[i][k] <= 57))){
+                    words[i][k] = '\0';
+                    break;
+                }
+            }
+        }
+        //printf("%s ",words[i]);
         i++;
     }
-
-
-
-
-    
     fclose(fpinput);
-    
-    return 0;
-
-
+    //printf("%d",i);
+    for(int l = 0; l < 20;l++){
+        //printf("%s",words[l]);
+    }
+    printf("word is : %s\n",words[2]);
+    return i;
 }
 
 int main(){
-    double vectors[numwords()][vectorsize()];
-    char dict[numwords() + 1][MAX_WORD_SIZE];
+    //double vectors[numwords()][vectorsize()];
+    //char dict[numwords() + 1][MAX_WORD_SIZE];
     char words[300000][MAX_WORD_SIZE];
 
 
