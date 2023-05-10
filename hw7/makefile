@@ -1,7 +1,7 @@
 all: clear compile run clean
 
 compile:
-	@gcc main.c -o test
+	@gcc main.c -o test -lm
 run:
 	@./test
 clear:
