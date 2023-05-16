@@ -1,1 +1,8 @@
-hk
+    printf("Enter text (press enter to exit):\n");
+    while (fgets(inputtedWord, sizeof(inputtedWord), stdin) != NULL) {
+        if (strcmp(inputtedWord, "\n") == 0) {
+            break;
+        }
+        fprintf(fptemp, "%s", inputtedWord);
+    }
+

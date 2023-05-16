@@ -69,10 +69,10 @@ void vectorAdding(const char *  file_name, char dict[][MAX_WORD_SIZE],float vecs
 			//printf("%.5f ", vecs[i][j]);
 		}
 		printf("\n");
-	}*/
+	}
     for(i = 0;i < numwords(); i++){
         printf("%s ",dict[i]);
-    }
+    }*/
 	
 }
 
@@ -85,17 +85,17 @@ double dissimilarity(char * w1, char * w2, char dict[][MAX_WORD_SIZE], float thr
             break;
         }
     }
-    float temp = 100,sum = 0;
+    double temp = 100,sum = 0;
     for(int k = 0;k < numwords();k++){
         sum = 0;
         for(int j = 0;j < vectorsize();j++){
             sum += pow(vecs[k][j] - vecs[i][j],2);
         }
         sum = sqrt(sum);
-        printf("\n%f",sum);
         if((sum < temp)&&(sum != 0)){
             temp = sum;
             tempint = k;
+            //printf("%lf\n",temp);
         }
         if(threshold < temp){
             return -1;
@@ -104,8 +104,8 @@ double dissimilarity(char * w1, char * w2, char dict[][MAX_WORD_SIZE], float thr
     for(int m = 0;m < MAX_WORD_SIZE; m++){
         w2[m] = dict[tempint][m];
     }
-    printf("\n%s\n",w2);
-    return 0;
+
+    return temp;
 }
 
 int read_dict(const char *  file_name, char dict[][MAX_WORD_SIZE]){
@@ -252,37 +252,89 @@ int read_text(const char * text_file, const char * ignore_file, char words[][MAX
 }
 
 void occurence(char inputt[100][MAX_WORD_SIZE],char words[300000][MAX_WORD_SIZE],int enternum,int counter[100]){
+    
 
-    char w1[MAX_WORD_SIZE];
-    int i,k;
+    int i,j;
     int wordsize = read_text(inputtxt,ignoretxt,words);
     for(i = 0; i < wordsize; i++){
-        for(int j = 0;j < enternum; j++){
+        for(j = 0;j < enternum; j++){
             if(strcmp(inputt[j],words[i]) == 0){
             counter[j]++;
             }
-        }
+        }   
     }
     //printf("%d",count);
     return;
 }
+int histogram(const char inputt[][MAX_WORD_SIZE],int enternum, const int occurrences[], const char hist[][MAX_WORD_SIZE+5+20]){
 
+    //     for(int i = 0;i < enternum;i++){
+    //     if(occurrences[i] != 0){
+    //         printf("occurence of %s is : %d\n",inputt[i],occurrences[i]);
+    //     }
+    //     else{
+
+    //         printf("%s is not in the input.txt\n",inputt[i]);
+    //     }
+    // }
+    int max = 0;
+    int scale;
+    
+    for(int k = 0;k < enternum;k++){
+        if(occurrences[k] > max){
+            max = occurrences[k];
+        }
+    }
+    if(max%20!=0){
+        scale = max/20 +1;
+    }
+    else {
+        scale = 1;
+    }
+    int k;
+    printf("Enter word(s): ");
+    for(int i = 0;i< enternum;i++){
+
+        
+        printf("%s ",inputt[i]);
+    }
+    
+    printf("\nScale: %d \n",scale);
+
+    for(int i = 0;i< enternum;i++){
+        printf("“%s”      ",inputt[i]);
+        for(k = 0; k < occurrences[i]/scale;k++){
+            printf("*");
+        }
+        if(occurrences[i] == 0){
+            printf("NO MATCHES");
+        }
+        printf("\n");
+
+
+    }
+
+
+
+}
 
 int main(){
     FILE * fptemp = fopen("temp.txt","w");
     //double vectors[numwords()][vectorsize()];
-   
+    float threshold = 6;
     int x;
     x=numwords();
-     printf("\n%d",x);
+    //printf("\n%d",x);
     char dict[1001][MAX_WORD_SIZE];
     char words[300000][MAX_WORD_SIZE];
     char inputtedWord;
     char inputt[100][MAX_WORD_SIZE];
     int counter[100] = {0};
     float vecs[numwords()][vectorsize()];
-    char w1[MAX_WORD_SIZE] = {"lightly"};
+    char w1[MAX_WORD_SIZE];
     char w2[MAX_WORD_SIZE];
+    char hist[100][MAX_WORD_SIZE+5+20];
+    int occurrences[100];
 
     printf("Enter text (press enter to exit):\n");
     while ((inputtedWord = getchar()) != EOF) {
@@ -301,31 +353,55 @@ int main(){
         fscanf(fptemp,"%s",inputt[i]);
         enternum++;
         i++;
-
     }
+    enternum--;
 
-    // read_dict(dictionary,dict);
-    // read_text(inputtxt,ignoretxt,words);
+
+    //read_dict(dictionary,dict);
+    read_text(inputtxt,ignoretxt,words);
     vectorAdding(dictionary,dict,vecs);
-    // occurence(inputt,words,enternum,counter);
-    dissimilarity(w1,w2,dict,6,vecs);//////////////////////////////////////////////////////////////////////////////
-    for(i = 0;i < enternum - 1;i++){
-        if(counter[i] != 0){
-            printf("occurence is : %d\n",counter[i]);
-        }
-        else{
-            printf("closest word's occurence is :\n");
-        }
-    }
+    occurence(inputt,words,enternum,counter);
 
-    for(int i = 0;i < numwords();i++){
-        for(int k = 0;k< vectorsize();k++){
-            //printf("%f  ",vecs[i][k]);
-        }
-        //printf("\n");
-    }
+
+    // for(int j = 0;j < enternum;j++){
+    //     if(counter[j] == 0){
+    //         dissimilarity(inputt[j],w2,dict,threshold,vecs);
+    //         for(int m = 0;m < MAX_WORD_SIZE;m++){
+    //             inputt[j][m] = w2[m];
+    //         }
+           
+    //     }
+    // }
+
+    // for(int m = 0;m < enternum;m++){
+    //     for(int e = 0;e < numwords();e++){
+    //         if(strcmp(inputt[m],words[e]) == 0){
+    //             flag = 1;
+    //             break;
+    //         }
+    //     }
+    //     if (flag == 0){
+            
+    //     }
+        
+    //     flag = 0;
+    // }
     
 
-    //system("rm temp.txt");
+    for(int i = 0;i < 100;i++){
+        occurrences[i] = counter[i];
+    }
+       //////////////////////////////////////////////////////////////////////////////
+    histogram(inputt,enternum,occurrences,hist);
+
+    // for(int i = 0;i < numwords();i++){
+    //     for(int k = 0;k< vectorsize();k++){
+    //         //printf("%f  ",vecs[i][k]);
+    //     }
+    //     //printf("\n");
+    // }
+    
+
+    system("rm temp.txt");
     return 0;
 }
