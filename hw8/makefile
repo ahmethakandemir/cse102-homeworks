@@ -2,7 +2,7 @@ all: clear compile run clean
 clear:
 	clear
 compile:
-	@gcc main.c -lm -o test
+	@gcc main.c -o test
 run:
 	@./test
 clean:

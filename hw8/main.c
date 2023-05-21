@@ -1,7 +1,8 @@
 #include <stdio.h>
-#include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/time.h>
+
 FILE * boardfile;
 
 
@@ -27,11 +28,37 @@ int isinarray(int num){
     }
     return 0;
 }
+int isSolvable(int puzzle[3][3]) {
+    int inversions = 0;
+    int flat_puzzle[9];
+
+    // Flatten the puzzle into a 1D array
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            flat_puzzle[i * 3 + j] = puzzle[i][j];
+        }
+    }
+
+    // Count the number of inversions
+    for (int i = 0; i < 9; i++) {
+        for (int j = i + 1; j < 9; j++) {
+            if (flat_puzzle[i] != 0 && flat_puzzle[j] != 0 && flat_puzzle[i] > flat_puzzle[j]) {
+                inversions++;
+            }
+        }
+    }
+
+    // Check if the puzzle is solvable
+    if (inversions % 2 == 0) {
+        return 1;  // Solvable
+    } else {
+        return 0;  // Not solvable
+    }
+}
+
 
 int shuffle(){
     int num;
-    srand(time(NULL));
-
     for(int i = 0;i < 3;i++){
         for(int k = 0;k < 3;k++){
             if(i == 2 && k == 2){
@@ -44,13 +71,18 @@ int shuffle(){
                 }
             }
             board.tiles[i][k] = num;
-
         }
     }
     board.moves = 0;
     board.blank_col = 2;
     board.blank_row = 2;
-    return 1;
+    if(isSolvable(board.tiles)){
+        return 1;
+    }
+    else{
+        shuffle();
+    }
+    return 0;
 }
 
 int drawBoard(){
@@ -123,9 +155,8 @@ void scoring(int cases){
         }
     }
     else if(cases == 2){
-        printf("\n mTotal number of computer moves : %d\n",board.moves);
+        printf("\nTotal number of computer moves : %d\n",board.moves);
     }
-
 }
 int gameplay(){
 
@@ -175,16 +206,12 @@ int gameplay(){
     }
     board.moves++;
     drawBoard();
-    
     if(checkStatus()){
         return 2;
     }
     else{
         gameplay();
     }
-
-
-
     return 0;
 }
 
@@ -192,11 +219,16 @@ int autoPlay(){
     
     int movement,directpicker;
     char direction;
-    while(1){
+    while(1){        
         movement = random()%8 + 1;
+        while(movement == 1 && board.tiles[0][0] == 1){
+            movement = random()%8 + 1;
+        }
+        while(movement == 3 && board.tiles[0][2] == 3){
+            movement = random()%8 + 1;
+        }
         directpicker = random()%4 + 1;
-        switch (directpicker)
-        {
+        switch (directpicker){
         case 1:
             direction = 'R';
             break;
@@ -254,7 +286,7 @@ int autoPlay(){
     }
     else{
         //sleep(1);
-        printf("%d",board.moves);
+        //printf("%d",board.moves);
         autoPlay();
     }
 
@@ -262,8 +294,12 @@ int autoPlay(){
 }
 
 int main(){
-    srand(time(NULL));
-    board.best_score = -9999;
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    unsigned int seed = tv.tv_sec ^ tv.tv_usec;
+    srand(seed);
+    board.best_score = 0;
+    
     while(1){
 
     int selection = 0;
@@ -272,7 +308,7 @@ int main(){
     printf("1. Play game as a user\n2. Finish the game with PC\n3. Show the best score\n4. Exit\n");
     while (!(selection >= 1 && selection <= 4)){
         scanf("%d",&selection);
-        getchar();
+
     }
     switch (selection){
     case 1:
@@ -280,17 +316,20 @@ int main(){
         drawBoard();
         gameplay();
         scoring(1);
+        break;
     case 2:
         shuffle();
         drawBoard();
         autoPlay();
         scoring(2);
+        break;
     case 3:
-        printf("The best score is: %d",board.best_score);
+        printf("The best score is: %d\n",board.best_score);
+        break;
+    case 4:
+        return 1;
     default:
         break;
     }
-    
-
     }
 }
