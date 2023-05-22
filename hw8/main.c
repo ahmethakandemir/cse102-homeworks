@@ -226,8 +226,6 @@ int autoPlay(){
             movement = random()%8 + 1;
         }
         
-        
-        
         directpicker = random()%4 + 1;
         switch (directpicker){
         case 1:
