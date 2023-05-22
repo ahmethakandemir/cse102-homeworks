@@ -2,10 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/time.h>
-
 FILE * boardfile;
-
-
 typedef struct
 {
     int tiles[3][3];
@@ -16,8 +13,6 @@ typedef struct
     int best_score;
 } boardType;
 boardType board;
-
-
 int isinarray(int num){
     for (int i = 0; i < 3; i++){
         for(int k = 0;k < 3;k++){
@@ -28,6 +23,7 @@ int isinarray(int num){
     }
     return 0;
 }
+
 int isSolvable(int puzzle[3][3]) {
     int inversions = 0;
     int flat_puzzle[9];
@@ -55,7 +51,6 @@ int isSolvable(int puzzle[3][3]) {
         return 0;  // Not solvable
     }
 }
-
 
 int shuffle(){
     int num;
@@ -122,6 +117,7 @@ int checkStatus(){
     return 1;
 
 }
+
 int islegal(int movement, char direction) {
     int tempi, tempk;
     for (int i = 0; i < 3; i++) {
@@ -145,6 +141,7 @@ int islegal(int movement, char direction) {
         return 0;
     }
 }
+
 void scoring(int cases){
     if(cases == 1){
         printf("\n mTotal number of moves : %d\n",board.moves);
@@ -158,6 +155,7 @@ void scoring(int cases){
         printf("\nTotal number of computer moves : %d\n",board.moves);
     }
 }
+
 int gameplay(){
 
     int movement;
@@ -227,6 +225,9 @@ int autoPlay(){
         while(movement == 3 && board.tiles[0][2] == 3){
             movement = random()%8 + 1;
         }
+        
+        
+        
         directpicker = random()%4 + 1;
         switch (directpicker){
         case 1:
