@@ -144,7 +144,7 @@ int islegal(int movement, char direction) {
 
 void scoring(int cases){
     if(cases == 1){
-        printf("\n mTotal number of moves : %d\n",board.moves);
+        printf("\n Total number of moves : %d\n",board.moves);
         board.score = 1000 - (board.moves * 10);
         printf("Your Score: %d\n", board.score);
         if(board.score > board.best_score){
@@ -303,32 +303,35 @@ int main(){
 
     int selection = 0;
     printf("\nwelcome to the 8 puzzle game!!\n");
-    printf("Please select an option:\n");
     printf("1. Play game as a user\n2. Finish the game with PC\n3. Show the best score\n4. Exit\n");
     while (!(selection >= 1 && selection <= 4)){
+        printf("\nPlease select an option: ");
         scanf("%d",&selection);
+        getchar();
 
     }
     switch (selection){
-    case 1:
-        shuffle();
-        drawBoard();
-        gameplay();
-        scoring(1);
-        break;
-    case 2:
-        shuffle();
-        drawBoard();
-        autoPlay();
-        scoring(2);
-        break;
-    case 3:
-        printf("The best score is: %d\n",board.best_score);
-        break;
-    case 4:
-        return 1;
-    default:
-        break;
-    }
+        case 1:
+            shuffle();
+            drawBoard();
+            gameplay();
+            scoring(1);
+            break;
+        case 2:
+            shuffle();
+            drawBoard();
+            autoPlay();
+            scoring(2);
+            break;
+        case 3:
+            printf("The best score is: %d\n",board.best_score);
+            break;
+        case 4:
+            return 0;
+        default:
+            printf("wrong selection!!\n");
+            break;
+        }
+        
     }
 }
