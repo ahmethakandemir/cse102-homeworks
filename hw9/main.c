@@ -131,10 +131,17 @@ int update(struct boardstruct*** board, struct snakestruct* snake, int* snakeSiz
                     (*snakeSize)++;
                     int xbait, ybait;
                     while (1) {
+                        int flag = 0;
                         xbait = rand() % 10;
                         ybait = rand() % 10;
+                        for(int k = 0; k < *snakeSize;k++){
+                            if((xbait == snake[k].x) && (ybait == snake[k].y)){
+                                flag = 1;
+                                break;
+                            }
+                        }
                         // Check if the new bait doesn't overlap with snake or existing bait
-                        if (!(board[xbait][ybait]->type == 'b') && !(board[xbait][ybait]->type == 'o')) {
+                        if (!(board[xbait][ybait]->type == 'b') && !(board[xbait][ybait]->type == 'o') && (flag == 0)) {
                             break;
                         }
                     }
@@ -191,7 +198,7 @@ int check_status(struct boardstruct*** board, struct snakestruct* snake, int sna
         for(int k = 0;k < 10;k++){
             if(board[i][k]->type == 'o'){
                 if((snake[0].x == k) && (snake[0].y == i)){
-                    if(board[i][k]->value > snakeSize){
+                    if(board[i][k]->value > snakeSize - 1){
                         return 1;
                     }
                     else{
@@ -200,6 +207,11 @@ int check_status(struct boardstruct*** board, struct snakestruct* snake, int sna
 
                 }
             }
+        }
+    }
+    for(int k = 1; k < snakeSize - 1;k++){
+        if((snake[0].x == snake[k].x) && (snake[0].y == snake[k].y)){
+            return 1;
         }
     }
     return 0;
@@ -213,7 +225,7 @@ void play(struct boardstruct*** board) {
 
     while (1) {
         draw_board(board, snake, snakeSize);
-        printf("\nsnake size is: %d\n",snakeSize);
+        printf("\nsnake size is: %d\n",snakeSize - 1);
         move(board, snake, snakeSize);
         if (check_status(board,snake, snakeSize)) {
             printf("Game Over! You lost.\n");

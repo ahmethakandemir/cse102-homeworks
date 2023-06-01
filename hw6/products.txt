@@ -1,0 +1,7 @@
+1,D,Ayran,Sutas,20.50
+2,F,Simit,Firin,8.00
+3,C,Toz,Ariel,35.00
+4,D,Kola,Pepsi,12.00
+5,F,Kek,ulker,9.00
+6,C,Sabun,Lux,12.00
+7,O,Mum,Ikea,18.00
