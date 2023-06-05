@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <unistd.h>
 
 struct boardstruct {
     char type;
@@ -48,6 +47,8 @@ struct boardstruct*** init_board() {
     return board;
 }
 void draw_board(struct boardstruct*** board, struct snakestruct* snake, int snakeSize) {
+    
+    system("clear");
     printf("┌--------------------┐\n");
     
     for (int i = 0; i < 10; i++) {
@@ -87,47 +88,55 @@ void draw_board(struct boardstruct*** board, struct snakestruct* snake, int snak
 
 
 void move(struct boardstruct*** board, struct snakestruct* snake, int snakeSize,char *lastDirection) {
-    char direction;
-    while (1) { // while loop for the iteration of prompting until the user enters a legal move.
-        printf("\nEnter your move: ");
-        scanf("%c", &direction);
-        while (getchar() != '\n');
-        if (direction == 'd' || direction == 'a' || direction == 'w' || direction == 's') {
-            break;
-        } 
-        else {
-            printf("\nPlease enter a legal move!!!:");
-        }
-    }
-    //printf("last direction: %c\n",*lastDirection);
-    ////////////  LAST DIRECTION AYARLA //////////////////////////////////////////////////
-    switch (direction) {
-        case 'w':
-            if(*lastDirection == 's'){
-                snake[0].y -= 1;
-                *lastDirection = direction;
+    while(1){
+        char direction;
+        while (1) { // while loop for the iteration of prompting until the user enters a legal move.
+            printf("\nEnter your move: ");
+            scanf("%c", &direction);
+            while (getchar() != '\n');
+            if (direction == 'd' || direction == 'a' || direction == 'w' || direction == 's') {
+                break;
+            } 
+            else {
+                printf("\nPlease enter a legal move!!!:");
             }
-            break;
-        case 's':
-            if(*lastDirection != 'w'){
+        }
+        //printf("last direction: %c\n",*lastDirection);
+        ////////////  LAST DIRECTION AYARLA //////////////////////////////////////////////////
+
+        if (direction == 'w') {
+                if (*lastDirection != 's' || snakeSize == 2) {
+                    snake[0].y -= 1;
+                    *lastDirection = direction;
+                    break;
+                }
+                draw_board(board,snake,snakeSize);
+        }
+        else if (direction == 's') {
+            if (*lastDirection != 'w' || snakeSize == 2) {
                 snake[0].y += 1;
                 *lastDirection = direction;
+                break;
             }
-            break;
-        case 'a':
-           if(*lastDirection != 'd'){
-               snake[0].x -= 1;
-               *lastDirection = direction;
+            draw_board(board,snake,snakeSize);
+        }
+        else if (direction == 'a') {
+            if (*lastDirection != 'd' || snakeSize == 2) {
+                snake[0].x -= 1;
+                *lastDirection = direction;
+                break;
             }
-            break;
-        case 'd':
-            if(*lastDirection != 'a'){
+            draw_board(board,snake,snakeSize);
+        }
+        else if (direction == 'd') {
+            if (*lastDirection != 'a' || snakeSize == 2) {
                 snake[0].x += 1;
                 *lastDirection = direction;
+                break;
             }
-            break;
-        default:
-            break;
+            draw_board(board,snake,snakeSize);
+        }
+        
     }
 
     
@@ -284,7 +293,7 @@ void play(struct boardstruct*** board) {
     char lastDirection = ' ';
     while (1) {
         draw_board(board, snake, snakeSize);
-        printf("\nsnake size is: %d\n", snakeSize - 1);
+        //printf("\nsnake size is: %d\n", snakeSize - 1);
         move(board, snake, snakeSize,&lastDirection);
         if (check_status(board, snake, snakeSize)) {
             printf("Game Over! You lost.\n");
@@ -311,6 +320,8 @@ int main() {
         free(board[i]);
     }
     free(board);
+
+
 
     return 0;
 }
