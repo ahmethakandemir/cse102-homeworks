@@ -46,12 +46,11 @@ void addBook(char* isbn, char* title, char* author, int publicationYear, int met
     }
 }
 
-int main() {
-    // Open the file for reading
+void txttoll(){
     FILE* file = fopen("books.txt", "r");
     if (file == NULL) {
         printf("Failed to open the file.\n");
-        return 1;
+        return;
     }
 
     // Read the file line by line using fscanf
@@ -68,15 +67,52 @@ int main() {
     // Close the file
     fclose(file);
 
-    // Print the title of each book in the list
-    book* currentBook = books;
-    while (currentBook != NULL) {
-        printf("Title: %s\n", currentBook->title);
-        currentBook = currentBook->next;
-    }
+}
 
+int main() {
+    book* currentBook = books;
+    txttoll();
+
+    int selection,method;
+    while(1){
+        char isbn[15] = {'\0'};
+        char title[30]= {'\0'};
+        char author[20] = {'\0'};
+        int publicationYear = 0;
+        printf("enter selection: ");
+        scanf("%d",&selection);
+        while (getchar() != '\n');
+        switch (selection){
+        case 1:
+            printf("select method (0 or 1): ");
+            scanf("%d",&method);
+            if(method == 0){
+                printf("enter values:");
+                scanf("%s,%s,%s,%d\n", isbn, title, author, &publicationYear);
+                while (getchar() != '\n');
+                addBook(isbn, title, author, publicationYear, 0);
+            }
+            else if(method == 1){
+                scanf("%[^,],%[^,],%[^,],%d\n", isbn, title, author, &publicationYear);
+                addBook(isbn, title, author, publicationYear, 1);    
+            }
+            break;
+        case 2:
+            printf("");
+
+
+        case 9:
+            printf("exitted!!");
+            return 0;
+        default:
+            break;
+        }
+    }
+    
+    
+    
     // Free the memory allocated for the books
-    currentBook = books;
+    
     while (currentBook != NULL) {
         book* nextBook = currentBook->next;
         free(currentBook);
