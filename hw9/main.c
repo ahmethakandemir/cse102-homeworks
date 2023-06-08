@@ -102,7 +102,6 @@ void move(struct boardstruct*** board, struct snakestruct* snake, int snakeSize,
             }
         }
         //printf("last direction: %c\n",*lastDirection);
-        ////////////  LAST DIRECTION AYARLA //////////////////////////////////////////////////
 
         if (direction == 'w') {
                 if (*lastDirection != 's' || snakeSize == 2) {
@@ -139,9 +138,6 @@ void move(struct boardstruct*** board, struct snakestruct* snake, int snakeSize,
         
     }
 
-    
-
-
 }
 int update(struct boardstruct*** board, struct snakestruct** snake, int* snakeSize) {
     static int moveCounter = 0;  // Static variable to keep track of the number of moves
@@ -156,22 +152,10 @@ int update(struct boardstruct*** board, struct snakestruct** snake, int* snakeSi
                     (*snakeSize)++;
                     (*snake) = (struct snakestruct*)realloc(*snake, (*snakeSize) * sizeof(struct snakestruct));
                     int xbait, ybait;
-                    while (1) {
-                        xbait = rand() % 10;
-                        ybait = rand() % 10;
-
-                        // Check if the new bait doesn't overlap with snake or existing bait
-                        int isOverlap = 0;
-                        for (int k = 0; k < *snakeSize; k++) {
-                            if ((xbait == (*snake)[k].x) && (ybait == (*snake)[k].y)) {
-                                isOverlap = 1;
-                                break;
-                            }
-                        }
-                        if (!isOverlap) {
-                            break;
-                        }
-                    }
+                    
+                    xbait = rand() % 10;
+                    ybait = rand() % 10;
+                    
                     board[xbait][ybait]->type = 'b';
                     break;
                 }
@@ -260,10 +244,10 @@ int update(struct boardstruct*** board, struct snakestruct** snake, int* snakeSi
 
 
 int check_status(struct boardstruct*** board, struct snakestruct* snake, int snakeSize) {
-    if (snake[0].x < 0 || snake[0].y < 0 || snake[0].x > 9 || snake[0].y > 9) {
+    if (snake[0].x < 0 || snake[0].y < 0 || snake[0].x > 9 || snake[0].y > 9) { // hitting the wall
         return 1;
     }
-    for(int i = 0;i < 10;i++){
+    for(int i = 0;i < 10;i++){                                                  // hitting bigger obstacle
         for(int k = 0;k < 10;k++){
             if(board[i][k]->type == 'o'){
                 if((snake[0].x == k) && (snake[0].y == i)){
@@ -278,7 +262,7 @@ int check_status(struct boardstruct*** board, struct snakestruct* snake, int sna
             }
         }
     }
-    for(int k = 1; k < snakeSize - 1;k++){
+    for(int k = 1; k < snakeSize - 1;k++){                                  // hitting tail
         if((snake[0].x == snake[k].x) && (snake[0].y == snake[k].y)){
             return 1;
         }
