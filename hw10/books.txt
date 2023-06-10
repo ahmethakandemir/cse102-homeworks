@@ -1,4 +1,4 @@
-1000,A Game of Thrones,George R. R. Martin,1996
+1000,ebrosumun favorisi,George R. R. Martin,1402
 1001,A Clash of Kings,George R. R. Martin,1998
 1002,A Storm of Swords,George R. R. Martin,2000
 1003,A Feast for Crows,George R. R. Martin,2005
