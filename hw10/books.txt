@@ -1,5 +1,7 @@
-1000,ebrosumun favorisi,George R. R. Martin,1402
-1001,A Clash of Kings,George R. R. Martin,1998
-1002,A Storm of Swords,George R. R. Martin,2000
-1003,A Feast for Crows,George R. R. Martin,2005
-1004,A Dance with Dragons,George R. R. Martin,2011
+998,Hakanin Kitabi,Hakan,2003,0
+1004,A Dance with Dragons,George R. R. Martin,2011,1
+1003,A Feast for Crows,George R. R. Martin,2005,1
+1002,A Storm of Swords,George R. R. Martin,2000,0
+1001,Yeni ad,George R. R. Martin,1998,1
+999,CBR1000RR-R Fireblade,Honda,2022,0
+997,hakanin kitabi,method 1,2014,0
