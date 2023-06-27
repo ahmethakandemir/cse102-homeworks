@@ -80,7 +80,7 @@ void fillLinkedList(struct Node** head) {
                 Asset4* newAsset4 = (Asset4*)malloc(sizeof(Asset4));
                 strcpy(newAsset4->type, "asset4");
                 newAsset4->value1 = ((double)rand() / RAND_MAX);
-                newAsset4->value2 = ((float)rand() / RAND_MAX);
+                newAsset4->value2 = ((float)rand() - 1 / RAND_MAX);
                 newAsset4->value3 = ((double)rand() / RAND_MAX);
                 newNode->data = newAsset4;
                 break;
@@ -137,10 +137,107 @@ void printLinkedList(struct Node* head) {
     }
 }
 
+// FILE * file = fopen("linkedlist.bin","wb");
+// int n = 25;
+// fwrite(&n,sizeof(n),1,file);
+// fclose(file);
+
+void serializeLinkedList(struct Node* head) {
+    FILE *fp = fopen("linkedlist.bin", "wb");
+    if(fp == NULL) {
+        printf("Error opening file.\n");
+        return;
+    }
+    Node* current = head;
+
+    while(current != NULL) {
+        if(strcmp(((Asset1*)current->data)->type, "asset1") == 0) {
+            Asset1* asset1 = (Asset1*)current->data;
+            fwrite(asset1, sizeof(Asset1), 1, fp);
+        }
+        else if(strcmp(((Asset2*)current->data)->type, "asset2") == 0) {
+            Asset2* asset2 = (Asset2*)current->data;
+            fwrite(asset2, sizeof(Asset2), 1, fp);
+        }
+        else if(strcmp(((Asset3*)current->data)->type, "asset3") == 0) {
+            Asset3* asset3 = (Asset3*)current->data;
+            fwrite(asset3, sizeof(Asset3), 1, fp);
+        }
+        else if(strcmp(((Asset4*)current->data)->type, "asset4") == 0) {
+            Asset4* asset4 = (Asset4*)current->data;
+            fwrite(asset4, sizeof(Asset4), 1, fp);
+        }
+
+        current = current->next;
+    }
+
+    fclose(fp);
+}
+
+void deserializeLinkedList(struct Node* head) {
+    FILE *fp = fopen("linkedlist.bin", "rb");
+    if(fp == NULL) {
+        printf("Error opening file.\n");
+        return;
+    }
+
+    fseek(fp, 0, SEEK_END);
+    long fileSize = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+
+    int nodeCount = fileSize / (sizeof(Asset1) + sizeof(Asset2) + sizeof(Asset3) + sizeof(Asset4));
+
+    int i;
+
+    for(i = 0; i < nodeCount; i++) {
+        Node* newNode = (Node*)malloc(sizeof(Node));
+        newNode->next = NULL;
+
+        char assetType[20];
+        fread(assetType, sizeof(assetType), 1, fp);
+
+        if(strcmp(assetType, "asset1") == 0) {
+            Asset1* newAsset1 = (Asset1*)malloc(sizeof(Asset1));
+            fread(newAsset1, sizeof(Asset1), 1, fp);
+            newNode->data = newAsset1;
+        }
+        else if(strcmp(assetType, "asset2") == 0) {
+            Asset2* newAsset2 = (Asset2*)malloc(sizeof(Asset2));
+            fread(newAsset2, sizeof(Asset2), 1, fp);
+            newNode->data = newAsset2;
+        }
+        else if(strcmp(assetType, "asset3") == 0) {
+            Asset3* newAsset3 = (Asset3*)malloc(sizeof(Asset3));
+            fread(newAsset3, sizeof(Asset3), 1, fp);
+            newNode->data = newAsset3;
+        }
+        else if(strcmp(assetType, "asset4") == 0) {
+            Asset4* newAsset4 = (Asset4*)malloc(sizeof(Asset4));
+            fread(newAsset4, sizeof(Asset4), 1, fp);
+            newNode->data = newAsset4;
+        }
+
+        if (head == NULL) {
+            head = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next != NULL) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
+    }
+
+    fclose(fp);
+}
+
+
 
 int main() {
     struct Node* head = NULL;
     fillLinkedList(&head);
-    printLinkedList(head);
+    //printLinkedList(head);
+    serializeLinkedList(head);
+    deserializeLinkedList(head);
     return 0;
 }
